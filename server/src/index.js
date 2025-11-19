@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
 import userRoutes from "./routes/userRoutes.js";
+import reflectionRoutes from "./routes/reflectionRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,7 @@ app.get("/", (req, res) => {
 });
 
 app.use("/api/users", userRoutes);
+app.use("/api/reflection", reflectionRoutes);
 
 
 const connectDB = async () => {

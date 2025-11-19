@@ -1,3 +1,6 @@
+import { useState } from "react";
+import axios from "axios";
+
 export default function Dashboard() {
   const user = (() => {
     try {
@@ -8,6 +11,35 @@ export default function Dashboard() {
   })();
 
   const creatorName = user?.name ? `${user.name.split(" ")[0]}` : "Creator";
+
+  const [reflectionText, setReflectionText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  const api = axios.create({ baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000" });
+
+  const handleSaveReflection = async () => {
+    if (!reflectionText.trim()) {
+      return;
+    }
+
+    setIsLoading(true);
+    setSuccessMessage("");
+
+    try {
+      await api.post("/api/reflection", {
+        userId: user?.id,
+        text: reflectionText
+      });
+
+      setSuccessMessage("Reflection saved!");
+      setReflectionText("");
+    } catch (error) {
+      console.error("Error saving reflection:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const sparkIdeas = ["Shadow Garden installation", "City hum soundscape", "Analog glitch poster pack"];
 
@@ -107,9 +139,24 @@ export default function Dashboard() {
         <section className="dash-card journal">
           <h3>Mini journal</h3>
           <p>Drop a sentence or two about what you want to explore next.</p>
-          <textarea placeholder="Today I want to explore..." rows={4} />
-          <button className="secondary-btn" type="button">
-            Save reflection
+          <textarea 
+            placeholder="Today I want to explore..." 
+            rows={4}
+            value={reflectionText}
+            onChange={(e) => setReflectionText(e.target.value)}
+          />
+          {successMessage && (
+            <p style={{ color: "green", marginTop: "10px", marginBottom: "10px" }}>
+              {successMessage}
+            </p>
+          )}
+          <button 
+            className="secondary-btn" 
+            type="button"
+            onClick={handleSaveReflection}
+            disabled={isLoading || !reflectionText.trim()}
+          >
+            {isLoading ? "Saving..." : "Save reflection"}
           </button>
         </section>
       </main>
