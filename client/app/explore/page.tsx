@@ -1,26 +1,15 @@
-// "use client";
-
-// import { useState, useEffect } from "react";
-// import MainLayout from "@/components/MainLayout";
-// import GlassCard from "@/components/GlassCard";
-// import { motion } from "framer-motion";
-// import { Search, TrendingUp, Sparkles } from "lucide-react";
-// import Link from "next/link";
-// import { imageUrls } from "@/lib/content";
-
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import MainLayout from "@/components/layout/MainLayout";
-
 import GlassCard from "@/components/ui/GlassCard";
-
-import { motion } from "framer-motion";
-import { Search, TrendingUp, Sparkles } from "lucide-react";
 import Link from "next/link";
-import { imageUrls } from "@/lib/content";
+import { motion } from "framer-motion";
+import { Search, TrendingUp, Sparkles, Compass } from "lucide-react";
 
-export default function ExplorePage() {
+import { videoUrls, imageUrls } from "@/lib/content";
+
+export default function Explore() {
     const [trendingPosts, setTrendingPosts] = useState<any[]>(
         Array.from({ length: 30 }).map((_, i) => ({
             _id: `${i + 1}`,
@@ -38,7 +27,7 @@ export default function ExplorePage() {
         Array.from({ length: 20 }).map((_, i) => ({
             _id: `${i + 1}`,
             description: `Fresh Spark #${i + 1} - Watch this!`,
-            thumbnailUrl: imageUrls[(i + 10) % imageUrls.length],
+            thumbnailUrl: imageUrls[(i + 10) % imageUrls.length], // Offset to be different from posts
             user: { name: `Sparker ${i + 1}` }
         }))
     );
@@ -53,12 +42,13 @@ export default function ExplorePage() {
     const [searchQuery, setSearchQuery] = useState("");
     const [showSuggestions, setShowSuggestions] = useState(false);
 
+    // Enhanced search logic: Filter categories AND users from trending posts
     const suggestions = [
         ...categories.map(c => ({ type: 'category', ...c })),
         ...trendingPosts.map(p => ({ type: 'user', id: p.user.name, name: p.user.name, image: p.user.avatar, link: `/explore/post/${p._id}` }))
     ].filter(item =>
         item.name.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 5);
+    ).slice(0, 5); // Limit to 5 suggestions
 
     useEffect(() => {
         const fetchData = async () => {
@@ -67,6 +57,7 @@ export default function ExplorePage() {
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
 
+                // Robust image handling: Enforce fallbacks if API data is missing images
                 if (data.trendingPosts?.length) {
                     setTrendingPosts(data.trendingPosts.map((post: any, i: number) => ({
                         ...post,
@@ -117,6 +108,7 @@ export default function ExplorePage() {
     return (
         <MainLayout>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                {/* Header Section */}
                 <motion.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -129,6 +121,7 @@ export default function ExplorePage() {
                         Discover trending ideas, creative sparks, and communities that match your vibe.
                     </p>
 
+                    {/* Google-like Search Bar */}
                     <div className="mt-8 max-w-2xl mx-auto relative z-50">
                         <div className={`relative flex items-center w-full bg-white rounded-full shadow-lg border transition-all duration-300 ${showSuggestions && searchQuery ? 'rounded-b-none rounded-t-3xl border-slate-200 shadow-xl' : 'border-transparent hover:shadow-xl'}`}>
                             <div className="pl-6 text-slate-400">
@@ -159,6 +152,7 @@ export default function ExplorePage() {
                             )}
                         </div>
 
+                        {/* Search Suggestions Dropdown */}
                         {showSuggestions && searchQuery && (
                             <div className="absolute top-full left-0 right-0 bg-white rounded-b-3xl shadow-xl border-t-0 border border-slate-200 overflow-hidden">
                                 {suggestions.length > 0 ? (
@@ -192,104 +186,117 @@ export default function ExplorePage() {
                 </motion.div>
 
                 {loading ? (
-                    <div className="space-y-12">
-                        {[1, 2, 3].map((n) => (
-                            <div key={n} className="space-y-6">
-                                <div className="h-8 w-48 bg-slate-200 rounded animate-pulse" />
-                                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                    {[1, 2, 3].map((i) => (
-                                        <div key={i} className="h-64 bg-slate-200 rounded-2xl animate-pulse" />
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
+                    <div className="flex justify-center items-center h-64">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
                     </div>
                 ) : (
-                    <div className="space-y-16">
-                        <motion.section variants={container} initial="hidden" animate="show">
-                            <div className="flex items-center gap-3 mb-6">
-                                <TrendingUp className="h-6 w-6 text-indigo-600" />
+                    <motion.div
+                        variants={container}
+                        initial="hidden"
+                        animate="show"
+                        className="space-y-16"
+                    >
+                        {/* Categories Grid */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-6">
+                                <Compass className="h-6 w-6 text-indigo-600" />
                                 <h2 className="text-2xl font-bold text-slate-800">Browse Categories</h2>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {categories.map((category) => (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                                {categories.map((category: any) => (
                                     <motion.div key={category.id} variants={item}>
                                         <Link href={`/explore/${category.id}`}>
-                                            <GlassCard className="relative h-48 overflow-hidden cursor-pointer group">
-                                                <div className="absolute inset-0">
-                                                    <img
-                                                        src={category.image}
-                                                        alt={category.name}
-                                                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                                                    />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                                                </div>
-                                                <div className="relative h-full flex items-end p-6">
-                                                    <h3 className="text-2xl font-bold text-white">{category.name}</h3>
-                                                </div>
+                                            <GlassCard className="h-40 flex items-center justify-center relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 border-white/40">
+                                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-colors" />
+                                                <h3 className="text-xl font-bold text-slate-700 group-hover:scale-110 transition-transform duration-300">
+                                                    {category.name}
+                                                </h3>
                                             </GlassCard>
                                         </Link>
                                     </motion.div>
                                 ))}
                             </div>
-                        </motion.section>
+                        </section>
 
-                        <motion.section variants={container} initial="hidden" animate="show">
-                            <div className="flex items-center gap-3 mb-6">
-                                <TrendingUp className="h-6 w-6 text-pink-600" />
+                        {/* Trending Posts */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-6">
+                                <TrendingUp className="h-6 w-6 text-rose-500" />
                                 <h2 className="text-2xl font-bold text-slate-800">Trending Now</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {trendingPosts.slice(0, 6).map((post) => (
+                                {trendingPosts.map((post: any) => (
                                     <motion.div key={post._id} variants={item}>
                                         <Link href={`/explore/post/${post._id}`}>
-                                            <GlassCard className="overflow-hidden cursor-pointer group hover:shadow-xl transition-shadow">
-                                                <div className="aspect-video overflow-hidden">
-                                                    <img
-                                                        src={post.image}
-                                                        alt=""
-                                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                                    />
-                                                </div>
-                                                <div className="p-5">
-                                                    <div className="flex items-center gap-3 mb-3">
-                                                        <img src={post.user.avatar} alt="" className="h-8 w-8 rounded-full" />
-                                                        <span className="font-medium text-slate-700">{post.user.name}</span>
+                                            <GlassCard className="h-full hover:shadow-lg transition-all duration-300 border-white/40 cursor-pointer group">
+                                                <div className="flex items-center gap-3 mb-4">
+                                                    <div className="h-10 w-10 rounded-full bg-slate-200 overflow-hidden">
+                                                        {post.user?.avatar && <img src={post.user.avatar} alt={post.user.name} className="h-full w-full object-cover" />}
                                                     </div>
-                                                    <p className="text-slate-600 line-clamp-2">{post.content}</p>
+                                                    <div>
+                                                        <p className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">{post.user?.name || "Anonymous"}</p>
+                                                        <p className="text-xs text-slate-500">{new Date(post.createdAt || Date.now()).toLocaleDateString()}</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-slate-600 line-clamp-3 mb-4">{post.content}</p>
+                                                {post.image && (
+                                                    <div className="mb-4 rounded-xl overflow-hidden h-40">
+                                                        <img src={post.image} alt="Post content" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                                                    </div>
+                                                )}
+                                                <div className="flex items-center justify-between text-sm text-slate-500">
+                                                    <span>{post.likes} Likes</span>
+                                                    <span className="text-indigo-500 font-medium">Read more →</span>
                                                 </div>
                                             </GlassCard>
                                         </Link>
                                     </motion.div>
                                 ))}
                             </div>
-                        </motion.section>
+                        </section>
 
-                        <motion.section variants={container} initial="hidden" animate="show">
-                            <div className="flex items-center gap-3 mb-6">
+                        {/* Recent Sparks */}
+                        <section>
+                            <div className="flex items-center gap-2 mb-6">
                                 <Sparkles className="h-6 w-6 text-amber-500" />
                                 <h2 className="text-2xl font-bold text-slate-800">Fresh Sparks</h2>
                             </div>
-                            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                                {recentSparks.slice(0, 8).map((spark) => (
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                {recentSparks.map((spark: any) => (
                                     <motion.div key={spark._id} variants={item}>
-                                        <Link href={`/sparks`}>
-                                            <div className="aspect-square rounded-2xl overflow-hidden cursor-pointer group relative">
+                                        <Link href="/sparks">
+                                            <div className="aspect-[9/16] rounded-2xl overflow-hidden relative group cursor-pointer shadow-md hover:shadow-xl transition-all duration-300">
                                                 <img
-                                                    src={spark.thumbnailUrl}
-                                                    alt=""
-                                                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                                                    src={spark.thumbnailUrl || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80"}
+                                                    alt="Spark thumbnail"
+                                                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                                 />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-4">
+                                                    <p className="text-white font-medium text-sm line-clamp-2">{spark.description}</p>
+                                                </div>
+                                                <div className="absolute top-2 right-2 bg-black/30 backdrop-blur-sm rounded-full p-1.5">
+                                                    <Sparkles className="h-3 w-3 text-white" />
+                                                </div>
                                             </div>
                                         </Link>
                                     </motion.div>
                                 ))}
                             </div>
-                        </motion.section>
-                    </div>
+                        </section>
+                    </motion.div>
                 )}
             </div>
         </MainLayout>
     );
 }
+
+// Initialized explore structure
+// Fixed trending photos
+// Fixed fresh sparks photos
+// Added search autocomplete
+// Enhanced search UI
+// Initialized explore structure
+// Fixed trending photos
+// Fixed fresh sparks photos
+// Added search autocomplete
+// Enhanced search UI

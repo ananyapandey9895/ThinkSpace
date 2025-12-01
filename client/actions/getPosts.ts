@@ -20,6 +20,7 @@ const PostSchema = new mongoose.Schema({
 const Post = mongoose.models.Post || mongoose.model("Post", PostSchema);
 
 export async function getPosts() {
+    // await dbConnect();
     const dummyPosts = [
         {
             _id: "1",
@@ -27,13 +28,13 @@ export async function getPosts() {
             user: { name: "Sarah Wilson", image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop" },
             content: "Just finished working on the new design system! 🎨✨ The glassmorphism effects are coming together beautifully. What do you think about the new color palette?",
             likes: 42,
-            dim: 5,
+             dim: 5,
             thoughts: 3,
             spread: 12,
             createdAt: new Date().toISOString(),
         },
         {
-            _id: '2',
+             _id: '2',
             user: {
                 name: 'Sarah Chen',
                 image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80'
