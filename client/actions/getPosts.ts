@@ -60,6 +60,7 @@ export async function getPosts() {
             thoughts: 3,
             spread: 23,
             type: 'thought',
+            createdAt: new Date().toISOString(),
         }
     ];
 
