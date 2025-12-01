@@ -7,6 +7,7 @@ import reflectionRoutes from "./routes/reflectionRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
 import postRoutes from "./routes/posts.js";
+import exploreRoutes from "./routes/exploreRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -22,6 +23,7 @@ app.use("/api/reflection", reflectionRoutes);
 app.use("/api/notes", noteRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api/explore", exploreRoutes);
 
 
 const connectDB = async () => {
