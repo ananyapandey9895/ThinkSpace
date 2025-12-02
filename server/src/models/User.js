@@ -7,6 +7,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true },
   password: { type: String, required: true, select: false },
   image: { type: String },
+  bio: { type: String, maxlength: 500 },
+  location: { type: String },
+  website: { type: String },
+  bannerImage: { type: String },
   sparks: { type: Number, default: 0 },
   followers: { type: Number, default: 0 },
 }, { timestamps: true });

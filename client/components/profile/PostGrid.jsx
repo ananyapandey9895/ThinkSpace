@@ -1,90 +1,115 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import GlassCard from "@/components/ui/GlassCard";
 import { Zap, CloudRain, Brain, CornerUpRight } from "lucide-react";
 import PostDetailModal from "./PostDetailModal";
 import InteractionBar from "@/components/ui/InteractionBar";
-
-import { usePostList } from "@/hooks/usePostList";
+import { api } from "@/lib/api";
+import { useUser } from "@clerk/nextjs";
 
 const PostGrid = () => {
-    const { posts, selectedPost, setSelectedPost, updatePostStats, incrementThoughts } = usePostList([
-        {
-            id: 1,
-            image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=800&q=80",
-            title: "The Future of Digital Art",
-            user: "PixelMind",
-            userImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
-            stats: { spark: 1200, dim: 50, thoughts: 3, spread: 89 },
-        },
-        {
-            id: 2,
-            image: "https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=800&q=80",
-            title: "Why I'm Bullish on AI Art",
-            user: "PixelMind",
-            userImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
-            stats: { spark: 850, dim: 12, thoughts: 15, spread: 45 },
-        },
-        {
-            id: 3,
-            image: "https://images.unsplash.com/photo-1633356122544-f134324a6cee?w=800&q=80",
-            title: "Exploring the Metaverse",
-            user: "PixelMind",
-            userImage: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&q=80",
-            stats: { spark: 2300, dim: 8, thoughts: 42, spread: 156 },
+    const [posts, setPosts] = useState([]);
+    const [selectedPost, setSelectedPost] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const { user } = useUser();
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            try {
+                const handle = user?.username || user?.firstName?.toLowerCase();
+                if (handle) {
+                    const userPosts = await api.getUserPosts(handle);
+                    setPosts(userPosts || []);
+                }
+            } catch (error) {
+                console.error('Failed to fetch posts:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchPosts();
+    }, [user]);
+
+    const handleCommentAdd = async (text) => {
+        if (!selectedPost || !text) return;
+        try {
+            await api.createComment(selectedPost._id, text);
+            setPosts(prev => prev.map(p => 
+                p._id === selectedPost._id 
+                    ? { ...p, commentCount: (p.commentCount || 0) + 1 }
+                    : p
+            ));
+        } catch (error) {
+            console.error('Failed to add comment:', error);
         }
-    ]);
-
-    const handleCommentAdd = () => {
-        if (!selectedPost) return;
-        incrementThoughts(selectedPost.id);
     };
 
-    const handleInteraction = (postId, type, value) => {
-        updatePostStats(postId, type, value);
+    const handleInteraction = async (postId, type) => {
+        try {
+            if (type === 'spark') {
+                await api.likePost(postId);
+                setPosts(prev => prev.map(p => 
+                    p._id === postId 
+                        ? { ...p, likes: [...(p.likes || []), 'temp'] }
+                        : p
+                ));
+            }
+        } catch (error) {
+            console.error('Failed to interact:', error);
+        }
     };
+
+    if (loading) {
+        return <div className="text-center py-10 text-slate-500">Loading posts...</div>;
+    }
+
+    if (posts.length === 0) {
+        return <div className="text-center py-10 text-slate-500">No posts yet.</div>;
+    }
 
     return (
         <>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                 {posts.map((post) => (
                     <GlassCard
-                        key={post.id}
+                        key={post._id}
                         onClick={() => setSelectedPost(post)}
                         className="group relative aspect-[4/3] overflow-hidden cursor-pointer rounded-3xl border-0 shadow-md"
                     >
-                        <img
-                            src={post.image}
-                            alt="Post"
-                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                        />
+                        {post.media?.[0] || post.image ? (
+                            <img
+                                src={post.media?.[0] || post.image}
+                                alt="Post"
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                            />
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-accent)] flex items-center justify-center">
+                                <p className="text-white text-center p-6">{post.content?.substring(0, 100)}</p>
+                            </div>
+                        )}
 
-                        {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90" />
 
-                        {/* Content */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
                             <div className="flex items-center gap-2 mb-2 opacity-80">
-                                <img src={post.userImage} alt={post.user} className="w-6 h-6 rounded-full border border-white/50" />
-                                <span className="text-xs font-medium">{post.user}</span>
+                                <img src={post.user?.imageUrl || post.user?.avatar || `https://ui-avatars.com/api/?name=${post.user?.name}`} alt={post.user?.name} className="w-6 h-6 rounded-full border border-white/50" />
+                                <span className="text-xs font-medium">{post.user?.name || 'Anonymous'}</span>
                             </div>
-                            <h3 className="text-lg font-bold leading-tight mb-3">{post.title}</h3>
+                            <h3 className="text-lg font-bold leading-tight mb-3 line-clamp-2">{post.content || post.title}</h3>
 
                             <div className="flex items-center gap-4 text-sm opacity-80">
                                 <div className="flex items-center gap-1.5">
                                     <Zap size={16} className="fill-white/20" />
-                                    <span>{post.stats.spark}</span>
-                                </div>
-                                <div className="flex items-center gap-1.5">
-                                    <CloudRain size={16} className="fill-white/20" />
-                                    <span>{post.stats.dim}</span>
+                                    <span>{post.likes?.length || 0}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <Brain size={16} className="fill-white/20" />
-                                    <span>{post.stats.thoughts}</span>
+                                    <span>{post.commentCount || 0}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
                                     <CornerUpRight size={16} className="fill-white/20" />
-                                    <span>{post.stats.spread}</span>
+                                    <span>{post.shares || 0}</span>
                                 </div>
                             </div>
                         </div>

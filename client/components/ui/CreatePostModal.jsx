@@ -71,7 +71,9 @@ const CreatePostModal = ({ isOpen, onClose, onPostCreated }) => {
             dims: 0,
             thoughts: 0
         };
-        onPostCreated(newPost);
+        if (onPostCreated) {
+            onPostCreated(newPost);
+        }
         setTitle("");
         setBody("");
         setUploadedFiles([]);

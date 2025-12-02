@@ -2,13 +2,19 @@
 
 export async function getPosts() {
     try {
-        const res = await fetch('http://localhost:5001/api/posts', {
+        const res = await fetch('http://localhost:5001/api/feed/home', {
             cache: 'no-store',
             next: { revalidate: 0 }
         });
 
         if (!res.ok) {
-            throw new Error(`Failed to fetch posts: ${res.status} ${res.statusText}`);
+            console.log('Home feed failed, falling back to all posts');
+            const fallback = await fetch('http://localhost:5001/api/posts', {
+                cache: 'no-store',
+                next: { revalidate: 0 }
+            });
+            const data = await fallback.json();
+            return data.posts || [];
         }
 
         const data = await res.json();

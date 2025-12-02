@@ -10,27 +10,8 @@ import { Search, TrendingUp, Sparkles, Compass } from "lucide-react";
 import { videoUrls, imageUrls } from "@/lib/content";
 
 export default function Explore() {
-    const [trendingPosts, setTrendingPosts] = useState(
-        Array.from({ length: 30 }).map((_, i) => ({
-            _id: `${i + 1}`,
-            content: `This is trending post #${i + 1}. Exploring the beauty of ${i % 2 === 0 ? 'nature' : 'technology'} and creativity. #explore #life`,
-            user: {
-                name: `User ${i + 1}`,
-                avatar: `https://ui-avatars.com/api/?name=User+${i + 1}&background=random`
-            },
-            likes: Math.floor(Math.random() * 500),
-            createdAt: new Date().toISOString(),
-            image: imageUrls[i % imageUrls.length]
-        }))
-    );
-    const [recentSparks, setRecentSparks] = useState(
-        Array.from({ length: 20 }).map((_, i) => ({
-            _id: `${i + 1}`,
-            description: `Fresh Spark #${i + 1} - Watch this!`,
-            thumbnailUrl: imageUrls[(i + 10) % imageUrls.length], // Offset to be different from posts
-            user: { name: `Sparker ${i + 1}` }
-        }))
-    );
+    const [trendingPosts, setTrendingPosts] = useState([]);
+    const [recentSparks, setRecentSparks] = useState([]);
     const [categories, setCategories] = useState([
         { id: "digital-art", name: "Digital Art", image: imageUrls[0] },
         { id: "technology", name: "Technology", image: imageUrls[1] },
@@ -53,35 +34,30 @@ export default function Explore() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch("http://localhost:5001/api/explore");
+                const res = await fetch("http://localhost:5001/api/feed/explore");
                 if (!res.ok) throw new Error("Failed to fetch");
                 const data = await res.json();
 
-                // Robust image handling: Enforce fallbacks if API data is missing images
                 if (data.trendingPosts?.length) {
                     setTrendingPosts(data.trendingPosts.map((post, i) => ({
                         ...post,
-                        image: post.image || imageUrls[i % imageUrls.length],
+                        image: post.media?.[0] || post.image || imageUrls[i % imageUrls.length],
                         user: {
                             ...post.user,
-                            avatar: post.user?.avatar || `https://ui-avatars.com/api/?name=${post.user?.name || 'User'}&background=random`
+                            avatar: post.user?.imageUrl || post.user?.avatar || `https://ui-avatars.com/api/?name=${post.user?.name || 'User'}&background=random`
                         }
                     })));
                 }
-                if (data.recentSparks?.length) {
-                    setRecentSparks(data.recentSparks.map((spark, i) => ({
-                        ...spark,
-                        thumbnailUrl: spark.thumbnailUrl || imageUrls[(i + 10) % imageUrls.length]
-                    })));
-                }
-                if (data.categories?.length) {
-                    setCategories(data.categories.map((cat, i) => ({
-                        ...cat,
-                        image: cat.image || imageUrls[i % imageUrls.length]
+                if (data.topSpaces?.length) {
+                    setRecentSparks(data.topSpaces.slice(0, 8).map((space, i) => ({
+                        _id: space._id,
+                        description: space.name,
+                        thumbnailUrl: space.image || imageUrls[(i + 10) % imageUrls.length],
+                        user: { name: `${space.members?.length || 0} members` }
                     })));
                 }
             } catch (error) {
-                console.error("Failed to fetch explore content, using fallbacks", error);
+                console.error("Failed to fetch explore content", error);
             } finally {
                 setLoading(false);
             }
@@ -245,7 +221,7 @@ export default function Explore() {
                                                     </div>
                                                 )}
                                                 <div className="flex items-center justify-between text-sm text-slate-500">
-                                                    <span>{post.likes} Likes</span>
+                                                    <span>{post.likes?.length || 0} Likes</span>
                                                     <span className="text-[var(--color-primary)] font-medium">Read more →</span>
                                                 </div>
                                             </GlassCard>

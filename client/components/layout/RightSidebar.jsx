@@ -1,10 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Sparkles, TrendingUp, Shield } from "lucide-react";
 import Link from "next/link";
+import { api } from "@/lib/api";
 
 const RightSidebar = () => {
+    const [recentPosts, setRecentPosts] = useState([]);
+
+    useEffect(() => {
+        const fetchRecentPosts = async () => {
+            try {
+                const posts = await api.getPosts();
+                setRecentPosts(posts.slice(0, 3));
+            } catch (error) {
+                console.error('Failed to fetch recent posts:', error);
+            }
+        };
+        fetchRecentPosts();
+    }, []);
+
     return (
         <div className="hidden lg:block w-[310px] space-y-4">
             {/* Recent Posts Widget */}
@@ -13,26 +28,23 @@ const RightSidebar = () => {
                     <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider">Recent Posts</h3>
                 </div>
                 <div className="divide-y divide-slate-100">
-                    {[1, 2, 3].map((i) => (
-                        <div key={i} className="p-3 hover:bg-slate-50 cursor-pointer transition-colors">
+                    {recentPosts.length > 0 ? recentPosts.map((post) => (
+                        <div key={post._id} className="p-3 hover:bg-slate-50 cursor-pointer transition-colors">
                             <div className="flex items-center gap-2 mb-1">
-                                <div className="w-5 h-5 rounded-full bg-slate-200" />
-                                <span className="text-xs text-slate-500">r/Design • 4h ago</span>
+                                <img src={post.user?.imageUrl || post.user?.avatar || `https://ui-avatars.com/api/?name=${post.user?.name}`} alt="" className="w-5 h-5 rounded-full" />
+                                <span className="text-xs text-slate-500">{post.user?.name || 'Anonymous'} • {new Date(post.createdAt).toLocaleDateString()}</span>
                             </div>
-                            <h4 className="text-sm font-medium text-slate-900 mb-1">
-                                Minimalist layout inspiration for 2025
+                            <h4 className="text-sm font-medium text-slate-900 mb-1 line-clamp-2">
+                                {post.content?.substring(0, 60)}{post.content?.length > 60 ? '...' : ''}
                             </h4>
                             <div className="flex items-center gap-4 text-xs text-slate-500">
-                                <span>24 comments</span>
-                                <span>Share</span>
+                                <span>{post.commentCount || 0} comments</span>
+                                <span>{post.likes?.length || 0} likes</span>
                             </div>
                         </div>
-                    ))}
-                </div>
-                <div className="p-3 text-center border-t border-slate-200">
-                    <button className="text-sm font-bold text-[var(--color-primary)] hover:underline">
-                        Clear
-                    </button>
+                    )) : (
+                        <div className="p-3 text-center text-slate-400 text-sm">No recent posts</div>
+                    )}
                 </div>
             </div>
 
