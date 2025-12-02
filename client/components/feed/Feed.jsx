@@ -1,83 +1,95 @@
 "use client";
 
 import React, { useEffect } from "react";
-import { Zap, CloudRain, Brain, Share2 } from "lucide-react";
+import { Zap, Moon, Brain, Share2, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import GlassCard from "@/components/ui/GlassCard";
 import InteractionBar from "@/components/ui/InteractionBar";
 import PostDetailModal from "@/components/profile/PostDetailModal";
 import { usePostList } from "@/hooks/usePostList";
 import CreatePost from "./CreatePost";
+import RightSidebar from "@/components/layout/RightSidebar";
 
-const ThoughtCard = ({ post, onInteraction, onThoughtsClick }) => (
-    <GlassCard className="mb-6 hover:bg-white/40 transition-all duration-300 border-l-4 border-l-[var(--color-primary)]">
-        <div className="flex items-start gap-4">
-            <img src={post.user.image} alt={post.user.name} className="w-12 h-12 rounded-full border-2 border-white shadow-sm" />
-            <div className="flex-1">
-                <div className="flex justify-between items-start">
-                    <div>
-                        <h3 className="font-bold text-slate-800">{post.user.name}</h3>
-                        <p className="text-xs text-slate-500">{new Date(post.createdAt).toLocaleDateString('en-US')}</p>
+const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
+    const [sparks, setSparks] = React.useState(post.sparks || 0);
+    const [dims, setDims] = React.useState(post.dims || 0);
+    const [thoughts, setThoughts] = React.useState(post.thoughts || 0);
+
+    const handleSpark = (e) => {
+        e.stopPropagation();
+        setSparks(sparks + 1);
+        onInteraction(post._id, 'spark', sparks + 1);
+    };
+
+    const handleDim = (e) => {
+        e.stopPropagation();
+        setDims(dims + 1);
+        onInteraction(post._id, 'dim', dims + 1);
+    };
+
+    const handleShare = (e) => {
+        e.stopPropagation();
+        if (navigator.share) {
+            navigator.share({
+                title: 'ThinkSpace',
+                text: post.content || post.caption,
+                url: window.location.href
+            });
+        }
+    };
+
+    return (
+        <div className="flex flex-col bg-white border border-[#456882]/30 rounded-md mb-3 hover:border-[#456882]/50 transition-colors cursor-pointer overflow-hidden">
+            {/* Content Column */}
+            <div className="flex-1 p-2 md:p-3">
+                {/* Header */}
+                <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
+                    <div className="flex items-center gap-1">
+                        <img src={post.user.image} alt={post.user.name} className="w-5 h-5 rounded-full" />
+                        <span className="font-bold text-slate-900 hover:underline">r/{post.user.name.replace(/\s+/g, '')}</span>
                     </div>
+                    <span>•</span>
+                    <span>Posted by u/{post.user.username || post.user.name}</span>
+                    <span>•</span>
+                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
                 </div>
-                <p
-                    className="mt-2 text-slate-700 leading-relaxed text-lg cursor-pointer hover:text-[var(--color-primary)] transition-colors"
-                    onClick={onThoughtsClick}
-                >
-                    {post.content}
-                </p>
 
-                <div className="mt-4 pt-4 border-t border-[var(--color-primary)]/20">
-                    <InteractionBar
-                        initialCounts={{
-                            spark: post.likes,
-                            dim: post.dim || 0,
-                            thoughts: post.thoughts || 0,
-                            spread: post.spread || 0
-                        }}
-                        onInteraction={(type, value) => onInteraction(post._id, type, value)}
-                        onThoughtsClick={onThoughtsClick}
-                        shareUrl={`/explore/post/${post._id}`}
-                        shareTitle={`Check out this thought by ${post.user.name} on ThinkSpace`}
-                    />
+                {/* Title/Content */}
+                <div onClick={onThoughtsClick}>
+                    <h3 className="text-lg font-medium text-slate-900 mb-2 leading-snug">{post.content || post.caption}</h3>
+                    {post.image && (
+                        <div className="mt-3 mb-3 rounded-lg overflow-hidden border border-slate-200 bg-black/5 max-h-[500px] flex justify-center">
+                            <img src={post.image} alt="Post content" className="max-w-full max-h-[500px] object-contain" />
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer Actions */}
+                <div className="flex items-center gap-4 text-[#1B3C53] text-sm font-bold mt-4 pt-3 border-t border-[#456882]/30">
+                    <button onClick={handleSpark} className="flex items-center gap-2 px-3 py-2 hover:bg-[#456882]/10 rounded-md transition-colors">
+                        <Zap size={18} className="text-yellow-500" />
+                        <span>{sparks}</span>
+                    </button>
+                    <button onClick={handleDim} className="flex items-center gap-2 px-3 py-2 hover:bg-[#456882]/10 rounded-md transition-colors">
+                        <Moon size={18} className="text-gray-600" />
+                        <span>{dims}</span>
+                    </button>
+                    <button
+                        onClick={(e) => { e.stopPropagation(); onThoughtsClick(); }}
+                        className="flex items-center gap-2 px-3 py-2 hover:bg-[#456882]/10 rounded-md transition-colors"
+                    >
+                        <Brain size={18} className="text-purple-600" />
+                        <span>{thoughts}</span>
+                    </button>
+                    <button onClick={handleShare} className="flex items-center gap-2 px-3 py-2 hover:bg-[#456882]/10 rounded-md transition-colors">
+                        <Share2 size={18} className="text-blue-600" />
+                        <span>Share</span>
+                    </button>
                 </div>
             </div>
         </div>
-    </GlassCard>
-);
-
-const VisualCard = ({ post, onInteraction, onThoughtsClick }) => (
-    <GlassCard className="mb-6 overflow-hidden hover:shadow-xl transition-all duration-300 border-0">
-        <div className="relative aspect-video w-full overflow-hidden">
-            <img src={post.image} alt="Visual" className="w-full h-full object-cover hover:scale-105 transition-transform duration-700" />
-            <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/40 backdrop-blur-md px-3 py-1.5 rounded-full">
-                <img src={post.user.image} alt={post.user.name} className="w-6 h-6 rounded-full border border-white" />
-                <span className="text-white text-sm font-medium">{post.user.name}</span>
-            </div>
-        </div>
-        <div className="p-5">
-            <p
-                className="text-slate-700 mb-4 font-medium cursor-pointer hover:text-[var(--color-primary)] transition-colors"
-                onClick={onThoughtsClick}
-            >
-                {post.caption}
-            </p>
-            <InteractionBar
-                initialCounts={{
-                    spark: post.likes,
-                    dim: post.dim || 0,
-                    thoughts: post.thoughts || 0,
-                    spread: post.spread || 0
-                }}
-                onInteraction={(type, value) => onInteraction(post._id, type, value)}
-                onThoughtsClick={onThoughtsClick}
-                shareUrl={`/explore/post/${post._id}`}
-                shareTitle={`Check out this visual by ${post.user.name} on ThinkSpace`}
-            />
-        </div>
-    </GlassCard>
-);
-
+    );
+};
 
 export default function Feed({ initialPosts }) {
     const { posts, setPosts, selectedPost, setSelectedPost, updatePostStats, incrementThoughts } = usePostList(initialPosts);
@@ -95,53 +107,30 @@ export default function Feed({ initialPosts }) {
         incrementThoughts(selectedPost._id);
     };
 
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
-
-    const item = {
-        hidden: { y: 20, opacity: 0 },
-        show: { y: 0, opacity: 1 }
-    };
-
     return (
-        <div className="max-w-2xl mx-auto pb-20">
-            <motion.div
-                initial={{ opacity: 0, y: -20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-            >
+        <div className="flex gap-6">
+            {/* Main Feed Column */}
+            <div className="flex-1 min-w-0">
                 <CreatePost onPostCreated={handlePostCreated} />
-            </motion.div>
 
-            <motion.div
-                variants={container}
-                initial="hidden"
-                animate="show"
-            >
-                {posts?.map((post) => (
-                    <motion.div key={post._id} variants={item}>
-                        {post.type === 'thought' ?
-                            <ThoughtCard
-                                post={post}
-                                onInteraction={updatePostStats}
-                                onThoughtsClick={() => setSelectedPost(post)}
-                            /> :
-                            <VisualCard
-                                post={post}
-                                onInteraction={updatePostStats}
-                                onThoughtsClick={() => setSelectedPost(post)}
-                            />
-                        }
-                    </motion.div>
-                ))}
-            </motion.div>
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    {posts?.map((post) => (
+                        <RedditPostCard
+                            key={post._id}
+                            post={post}
+                            onInteraction={updatePostStats}
+                            onThoughtsClick={() => setSelectedPost(post)}
+                        />
+                    ))}
+                </motion.div>
+            </div>
+
+            {/* Right Sidebar Column */}
+            <RightSidebar />
 
             <PostDetailModal
                 post={selectedPost}

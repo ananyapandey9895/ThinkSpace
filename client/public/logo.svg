@@ -1,0 +1,36 @@
+<svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bulb body -->
+  <ellipse cx="150" cy="120" rx="45" ry="55" fill="#FFFF00" stroke="#000" stroke-width="4"/>
+  
+  <!-- Bulb top cap -->
+  <rect x="130" y="50" width="40" height="15" fill="#000"/>
+  <rect x="125" y="65" width="50" height="8" fill="#000"/>
+  
+  <!-- Filament -->
+  <path d="M 140 90 Q 135 100 140 110 Q 145 100 150 110 Q 155 100 160 110" stroke="#000" stroke-width="3" fill="none" stroke-linecap="round"/>
+  
+  <!-- Left side line -->
+  <line x1="80" y1="120" x2="40" y2="120" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Right side line -->
+  <line x1="220" y1="120" x2="260" y2="120" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Top left ray -->
+  <line x1="105" y1="75" x2="75" y2="45" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Top right ray -->
+  <line x1="195" y1="75" x2="225" y2="45" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Bottom left ray -->
+  <line x1="110" y1="165" x2="85" y2="200" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Bottom right ray -->
+  <line x1="190" y1="165" x2="215" y2="200" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Bottom center ray -->
+  <line x1="150" y1="175" x2="150" y2="220" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+  
+  <!-- Base -->
+  <rect x="120" y="220" width="60" height="8" fill="#000"/>
+  <ellipse cx="150" cy="228" rx="35" ry="8" fill="#000"/>
+</svg>

@@ -8,6 +8,7 @@ const postSchema = new mongoose.Schema({
     likes: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
     category: { type: String },
+    type: { type: String, enum: ['thought', 'visual'], default: 'thought' }
 }, { timestamps: true });
 
 export default mongoose.model('Post', postSchema);
