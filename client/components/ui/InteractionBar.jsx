@@ -61,34 +61,34 @@ const InteractionBar = ({
             id: "spark",
             icon: Zap,
             label: "Spark",
-            color: "text-cyan-400",
-            activeColor: "fill-cyan-400 text-cyan-400 drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]",
-            bgHover: "hover:bg-cyan-400/10"
+            color: "text-[var(--color-primary)]",
+            activeColor: "fill-[var(--color-primary)] text-[var(--color-primary)] drop-shadow-[0_0_8px_rgba(25,149,173,0.8)]",
+            bgHover: "hover:bg-[var(--color-primary)]/10"
         },
         {
             id: "dim",
             icon: CloudRain,
             label: "Dim",
-            color: "text-blue-400",
-            activeColor: "fill-blue-400 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]",
-            bgHover: "hover:bg-blue-400/10"
+            color: "text-[var(--color-accent)]",
+            activeColor: "fill-[var(--color-accent)] text-[var(--color-accent)] drop-shadow-[0_0_8px_rgba(161,214,226,0.8)]",
+            bgHover: "hover:bg-[var(--color-accent)]/10"
         },
         {
             id: "thoughts",
             icon: Brain,
             label: "Thoughts",
-            color: "text-pink-500",
-            activeColor: "fill-pink-500 text-pink-500 drop-shadow-[0_0_8px_rgba(236,72,153,0.8)]",
-            bgHover: "hover:bg-pink-500/10",
+            color: "text-[var(--color-primary)]",
+            activeColor: "fill-[var(--color-primary)] text-[var(--color-primary)] drop-shadow-[0_0_8px_rgba(25,149,173,0.8)]",
+            bgHover: "hover:bg-[var(--color-primary)]/10",
             onClick: onThoughtsClick
         },
         {
             id: "spread",
             icon: CornerUpRight,
             label: "Spread",
-            color: "text-green-400",
-            activeColor: "fill-green-400 text-green-400 drop-shadow-[0_0_8px_rgba(74,222,128,0.8)]",
-            bgHover: "hover:bg-green-400/10"
+            color: "text-[var(--color-accent)]",
+            activeColor: "fill-[var(--color-accent)] text-[var(--color-accent)] drop-shadow-[0_0_8px_rgba(161,214,226,0.8)]",
+            bgHover: "hover:bg-[var(--color-accent)]/10"
         },
     ];
 

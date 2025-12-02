@@ -47,7 +47,7 @@ const Sidebar = () => {
                 animate="visible"
             >
                 <div className="px-4 py-4 mb-2">
-                    <h1 className="text-2xl font-bold text-[#72B7BF]">
+                    <h1 className="text-2xl font-bold text-[var(--color-primary)]">
                         ThinkSpace
                     </h1>
                 </div>
@@ -61,7 +61,7 @@ const Sidebar = () => {
                                     variants={itemVariants}
                                     className={cn(
                                         "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
-                                        isActive ? "text-[#72B7BF]" : "text-slate-500 hover:text-slate-800"
+                                        isActive ? "text-[var(--color-primary)]" : "text-slate-500 hover:text-slate-800"
                                     )}
                                     whileHover={{ scale: 1.02, x: 4 }}
                                     whileTap={{ scale: 0.98 }}
@@ -69,7 +69,7 @@ const Sidebar = () => {
                                     {isActive && (
                                         <motion.div
                                             layoutId="activePill"
-                                            className="absolute inset-0 bg-[#72B7BF]/20 rounded-2xl -z-10"
+                                            className="absolute inset-0 bg-[var(--color-primary)]/20 rounded-2xl -z-10"
                                             transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                         />
                                     )}
@@ -81,7 +81,7 @@ const Sidebar = () => {
                     })}
                 </nav>
 
-                <div className="mt-4 pt-4 border-t border-[#72B7BF]/20 flex flex-col gap-1">
+                <div className="mt-4 pt-4 border-t border-[var(--color-primary)]/20 flex flex-col gap-1">
                     {isSignedIn ? (
                         <>
                             <Link href="/settings">
@@ -111,7 +111,7 @@ const Sidebar = () => {
                             <Link href="/sign-in">
                                 <motion.div
                                     variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-[#72B7BF] hover:bg-[#72B7BF]/10 transition-all"
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-all"
                                     whileHover={{ scale: 1.02, x: 4 }}
                                 >
                                     <LogIn size={22} />
@@ -122,7 +122,7 @@ const Sidebar = () => {
                             <Link href="/sign-up">
                                 <motion.div
                                     variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[#72B7BF] text-white hover:bg-[#5da3ab] transition-all shadow-lg shadow-teal-500/30"
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/80 transition-all shadow-lg"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                 >

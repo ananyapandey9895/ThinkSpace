@@ -16,7 +16,7 @@ const HomeHeader = () => {
             <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-3">
                     <motion.div
-                        className="p-2 bg-[#72B7BF]/20 rounded-xl relative overflow-hidden"
+                        className="p-2 bg-[var(--color-primary)]/20 rounded-xl relative overflow-hidden"
                         animate={{
                             y: [0, -5, 0],
                         }}
@@ -27,7 +27,7 @@ const HomeHeader = () => {
                         }}
                     >
                         <motion.div
-                            className="absolute inset-0 bg-[#72B7BF]/10"
+                            className="absolute inset-0 bg-[var(--color-primary)]/10"
                             animate={{
                                 scale: [1, 1.2, 1],
                                 opacity: [0.5, 0.8, 0.5],
@@ -48,7 +48,7 @@ const HomeHeader = () => {
                                 ease: "easeInOut"
                             }}
                         >
-                            <Sparkles className="text-[#72B7BF] w-6 h-6 relative z-10" />
+                            <Sparkles className="text-[var(--color-primary)] w-6 h-6 relative z-10" />
                         </motion.div>
                     </motion.div>
 
@@ -74,7 +74,7 @@ const HomeHeader = () => {
 
             {/* Animated background effects */}
             <motion.div
-                className="absolute -z-10 top-0 left-0 w-64 h-64 bg-[#72B7BF]/5 rounded-full blur-3xl"
+                className="absolute -z-10 top-0 left-0 w-64 h-64 bg-[var(--color-primary)]/5 rounded-full blur-3xl"
                 animate={{
                     scale: [1, 1.2, 1],
                     opacity: [0.3, 0.5, 0.3],
@@ -89,7 +89,7 @@ const HomeHeader = () => {
             />
 
             <motion.div
-                className="absolute -z-10 top-10 right-0 w-48 h-48 bg-[#72B7BF]/3 rounded-full blur-3xl"
+                className="absolute -z-10 top-10 right-0 w-48 h-48 bg-[var(--color-primary)]/3 rounded-full blur-3xl"
                 animate={{
                     scale: [1, 1.3, 1],
                     opacity: [0.2, 0.4, 0.2],

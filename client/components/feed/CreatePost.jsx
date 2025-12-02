@@ -90,7 +90,7 @@ export default function CreatePost({ onPostCreated }) {
                 <AnimatePresence>
                     {isExpanded && (
                         <motion.div
-                            className="mt-4 pt-4 border-t border-[#72B7BF]/30"
+                            className="mt-4 pt-4 border-t border-[var(--color-primary)]/30"
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: "auto" }}
                             exit={{ opacity: 0, height: 0 }}
@@ -100,7 +100,7 @@ export default function CreatePost({ onPostCreated }) {
                                 <div className="flex items-center gap-4">
                                     <motion.button
                                         type="button"
-                                        className="p-2 text-slate-400 hover:text-[#72B7BF] transition-colors rounded-full hover:bg-[#72B7BF]/10"
+                                        className="p-2 text-slate-400 hover:text-[var(--color-primary)] transition-colors rounded-full hover:bg-[var(--color-primary)]/10"
                                         whileHover={{ scale: 1.1, rotate: 15 }}
                                         whileTap={{ scale: 0.9 }}
                                     >
@@ -132,7 +132,7 @@ export default function CreatePost({ onPostCreated }) {
                                                     cx="16"
                                                     cy="16"
                                                     r="14"
-                                                    stroke={charPercentage > 90 ? "#ef4444" : "#72B7BF"}
+                                                    stroke={charPercentage > 90 ? "#ef4444" : "var(--color-primary)"}
                                                     strokeWidth="2"
                                                     fill="none"
                                                     strokeDasharray={87.96}
@@ -153,14 +153,14 @@ export default function CreatePost({ onPostCreated }) {
                                 <motion.button
                                     type="submit"
                                     disabled={isLoading || !content.trim() || charCount > maxChars}
-                                    className="flex items-center gap-2 px-6 py-2 bg-[#72B7BF] text-white rounded-full font-medium hover:bg-[#5da3ab] transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-teal-200 relative overflow-hidden"
+                                    className="flex items-center gap-2 px-6 py-2 bg-[var(--color-primary)] text-white rounded-full font-medium hover:bg-[var(--color-primary)]/80 transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg relative overflow-hidden"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
                                     animate={!isLoading && content.trim() ? {
                                         boxShadow: [
-                                            "0 4px 6px -1px rgba(114, 183, 191, 0.1)",
-                                            "0 10px 15px -3px rgba(114, 183, 191, 0.3)",
-                                            "0 4px 6px -1px rgba(114, 183, 191, 0.1)",
+                                            "0 4px 6px -1px rgba(25, 149, 173, 0.1)",
+                                            "0 10px 15px -3px rgba(25, 149, 173, 0.3)",
+                                            "0 4px 6px -1px rgba(25, 149, 173, 0.1)",
                                         ]
                                     } : {}}
                                     transition={{

@@ -58,14 +58,14 @@ const SparkCommentModal = ({ spark, isOpen, onClose, onCommentSubmit }) => {
                             placeholder="Share your thoughts..."
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
-                            className="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-indigo-100 resize-none placeholder:text-slate-400 text-slate-700"
+                            className="w-full h-32 p-4 bg-slate-50 rounded-xl border-none focus:ring-2 focus:ring-[var(--color-accent)]/50 resize-none placeholder:text-slate-400 text-slate-700"
                             autoFocus
                         />
                         <div className="flex justify-end mt-4">
                             <button
                                 onClick={handleSubmit}
                                 disabled={!comment.trim()}
-                                className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-full font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center gap-2 px-4 py-2 bg-[var(--color-primary)] text-white rounded-full font-medium hover:bg-[var(--color-primary)]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 <span>Post Thought</span>
                                 <Send size={16} />

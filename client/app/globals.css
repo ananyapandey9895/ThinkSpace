@@ -6,8 +6,11 @@
 }
 
 :root {
-  --background: #FFFFC5;
-  --foreground: #72B7BF;
+  --color-primary: #1995AD;
+  --color-accent: #A1D6E2;
+  --color-bg: #F1F1F2;
+  --background: var(--color-bg);
+  --foreground: var(--color-primary);
 }
 
 html {
@@ -22,7 +25,8 @@ body {
 }
 
 .glass-panel {
-  @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-lg shadow-teal-100/50;
+  @apply bg-white/70 backdrop-blur-xl border border-white/50 shadow-lg;
+  box-shadow: 0 10px 15px -3px rgba(25, 149, 173, 0.1), 0 4px 6px -2px rgba(25, 149, 173, 0.05);
 }
 
 .scrollbar-hide::-webkit-scrollbar {
@@ -61,11 +65,11 @@ body {
 
   0%,
   100% {
-    box-shadow: 0 0 20px rgba(114, 183, 191, 0.3);
+    box-shadow: 0 0 20px rgba(25, 149, 173, 0.3);
   }
 
   50% {
-    box-shadow: 0 0 30px rgba(114, 183, 191, 0.6);
+    box-shadow: 0 0 30px rgba(25, 149, 173, 0.6);
   }
 }
 
@@ -123,7 +127,7 @@ body {
 .animate-shimmer {
   background: linear-gradient(90deg,
       transparent 0%,
-      rgba(114, 183, 191, 0.2) 50%,
+      rgba(25, 149, 173, 0.2) 50%,
       transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 3s infinite;
@@ -156,7 +160,7 @@ body {
 
 .hover-lift:hover {
   transform: translateY(-4px);
-  box-shadow: 0 10px 25px rgba(114, 183, 191, 0.2);
+  box-shadow: 0 10px 25px rgba(25, 149, 173, 0.2);
 }
 
 .hover-glow {
@@ -164,7 +168,7 @@ body {
 }
 
 .hover-glow:hover {
-  box-shadow: 0 0 20px rgba(114, 183, 191, 0.5);
+  box-shadow: 0 0 20px rgba(25, 149, 173, 0.5);
 }
 
 .hover-scale {
