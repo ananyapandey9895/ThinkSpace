@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import MainLayout from "@/components/layout/MainLayout";
 import GlassCard from "@/components/ui/GlassCard";
-import { Zap, Users, Settings } from "lucide-react";
+import { Zap, Users, Settings, UserPlus } from "lucide-react";
 import ProfileTabs from "./ProfileTabs";
 import PostGrid from "./PostGrid";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
@@ -56,10 +56,35 @@ const AnimatedCounter = ({ value, label }) => {
 
 const ProfileContent = ({ user }) => {
     const [activeTab, setActiveTab] = useState("sparks");
+    const [isFollowing, setIsFollowing] = useState(false);
     const coverRef = useRef(null);
     const { scrollY } = useScroll();
     const y = useTransform(scrollY, [0, 300], [0, 100]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
+
+    const handleFollow = () => {
+        const newFollowingState = !isFollowing;
+        setIsFollowing(newFollowingState);
+        
+        if (newFollowingState) {
+            const followedUsers = JSON.parse(localStorage.getItem('followedUsers') || '[]');
+            const userExists = followedUsers.some(u => u.username === user.username);
+            if (!userExists) {
+                followedUsers.push({
+                    username: user.username || user.firstName?.toLowerCase(),
+                    fullName: user.fullName,
+                    imageUrl: user.imageUrl
+                });
+                localStorage.setItem('followedUsers', JSON.stringify(followedUsers));
+                window.dispatchEvent(new Event('followedUsersUpdated'));
+            }
+        } else {
+            const followedUsers = JSON.parse(localStorage.getItem('followedUsers') || '[]');
+            const filtered = followedUsers.filter(u => u.username !== user.username);
+            localStorage.setItem('followedUsers', JSON.stringify(filtered));
+            window.dispatchEvent(new Event('followedUsersUpdated'));
+        }
+    };
 
     return (
         <MainLayout>
@@ -139,21 +164,43 @@ const ProfileContent = ({ user }) => {
                                 <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Zap size={16} /> 2 spaces</span>
                                 <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Users size={16} /> 7 thinkers</span>
                             </div>
+                            <button
+                                onClick={handleFollow}
+                                className={`hidden md:block mt-6 py-2 px-6 rounded-full font-bold transition-all ${
+                                    isFollowing
+                                        ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
+                                        : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
+                                }`}
+                            >
+                                {isFollowing ? 'Following' : 'Follow'}
+                            </button>
                         </div>
 
-                        <div className="flex md:hidden justify-between border-t border-b border-[var(--color-primary)]/20 py-4">
-                            <div className="text-center">
-                                <span className="block text-xl font-bold text-slate-800">5.4k</span>
-                                <span className="text-sm text-slate-500 font-medium">Sparks</span>
+                        <div className="flex md:hidden flex-col gap-4">
+                            <div className="flex justify-between border-t border-b border-[var(--color-primary)]/20 py-4">
+                                <div className="text-center">
+                                    <span className="block text-xl font-bold text-slate-800">5.4k</span>
+                                    <span className="text-sm text-slate-500 font-medium">Sparks</span>
+                                </div>
+                                <div className="text-center">
+                                    <span className="block text-xl font-bold text-slate-800">1.2k</span>
+                                    <span className="text-sm text-slate-500 font-medium">Thoughts</span>
+                                </div>
+                                <div className="text-center">
+                                    <span className="block text-xl font-bold text-slate-800">3.5k</span>
+                                    <span className="text-sm text-slate-500 font-medium">Followers</span>
+                                </div>
                             </div>
-                            <div className="text-center">
-                                <span className="block text-xl font-bold text-slate-800">1.2k</span>
-                                <span className="text-sm text-slate-500 font-medium">Thoughts</span>
-                            </div>
-                            <div className="text-center">
-                                <span className="block text-xl font-bold text-slate-800">3.5k</span>
-                                <span className="text-sm text-slate-500 font-medium">Followers</span>
-                            </div>
+                            <button
+                                onClick={handleFollow}
+                                className={`w-full py-2 px-4 rounded-full font-bold transition-all ${
+                                    isFollowing
+                                        ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
+                                        : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
+                                }`}
+                            >
+                                {isFollowing ? 'Following' : 'Follow'}
+                            </button>
                         </div>
                     </div>
                 </div>

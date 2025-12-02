@@ -7,20 +7,6 @@ import Link from "next/link";
 const RightSidebar = () => {
     return (
         <div className="hidden lg:block w-[310px] space-y-4">
-            {/* Premium Widget */}
-            <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm">
-                <div className="flex items-center gap-2 mb-2">
-                    <Shield className="text-[var(--color-primary)] fill-current" size={24} />
-                    <h3 className="text-sm font-semibold text-slate-900">ThinkSpace Premium</h3>
-                </div>
-                <p className="text-xs text-slate-500 mb-3">
-                    The best ThinkSpace experience, with monthly Coins, exclusive awards, and more.
-                </p>
-                <button className="w-full py-2 bg-[var(--color-primary)] text-white text-sm font-bold rounded-full hover:opacity-90 transition-opacity">
-                    Try Now
-                </button>
-            </div>
-
             {/* Recent Posts Widget */}
             <div className="bg-white rounded-lg border border-slate-200 shadow-sm overflow-hidden">
                 <div className="p-3 bg-slate-50 border-b border-slate-200">

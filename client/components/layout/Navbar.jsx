@@ -5,9 +5,11 @@ import Link from "next/link";
 import { Search, Menu, X, Bell, Plus, MessageSquare, User } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
+import CreatePostModal from "@/components/ui/CreatePostModal";
 
-const Navbar = ({ onMenuClick }) => {
+const Navbar = ({ onMenuClick, onPostCreated }) => {
     const [searchQuery, setSearchQuery] = useState("");
+    const [isCreateOpen, setIsCreateOpen] = useState(false);
 
     return (
         <nav className="fixed top-0 left-0 right-0 z-50 bg-[#1B3C53]/90 backdrop-blur-md border-b border-[#234C68] h-16">
@@ -46,7 +48,7 @@ const Navbar = ({ onMenuClick }) => {
 
                 {/* Right: Actions */}
                 <div className="flex items-center gap-2 md:gap-4">
-                    <button className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#234C68] text-white font-medium transition-colors">
+                    <button onClick={() => setIsCreateOpen(true)} className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-[#234C68] text-white font-medium transition-colors">
                         <Plus size={20} />
                         <span>Create</span>
                     </button>
@@ -65,6 +67,8 @@ const Navbar = ({ onMenuClick }) => {
                     </div>
                 </div>
             </div>
+
+            <CreatePostModal isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} onPostCreated={onPostCreated} />
         </nav>
     );
 };
