@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Home, Zap, Compass, ShoppingBag, User, Bell, PlusSquare } from "lucide-react";
+import { Menu, X, Home, Zap, Compass, ShoppingBag, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { UserButton } from "@clerk/nextjs";
 
@@ -28,30 +28,25 @@ const Navbar = () => {
                         ThinkSpace
                     </h1>
 
-                    {/* Mobile actions */}
-                    <div className="flex items-center gap-2 md:hidden ml-auto">
-                        <button className="h-8 w-8 rounded-full bg-white border border-[#A1D6E2] flex items-center justify-center text-slate-600">
-                            <Bell size={16} />
-                        </button>
+                    <div className="flex items-center gap-4">
                         <UserButton afterSignOutUrl="/sign-in" />
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className="p-2 rounded-full bg-white border border-[#A1D6E2] hover:bg-[#A1D6E2]/40 transition-colors"
+                            className="p-2 rounded-full hover:bg-white/50 transition-colors"
                         >
-                            {isOpen ? <X size={20} /> : <Menu size={20} />}
+                            {isOpen ? <X size={24} /> : <Menu size={24} />}
                         </button>
                     </div>
                 </div>
             </nav>
 
-            {/* Mobile slide-out nav for main sections */}
             <AnimatePresence>
                 {isOpen && (
                     <motion.div
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: -20 }}
-                        className="fixed inset-0 z-40 bg-white/95 backdrop-blur-3xl pt-24 px-6 md:hidden"
+                        className="fixed inset-0 z-40 bg-white/90 backdrop-blur-3xl pt-24 px-6 md:hidden"
                     >
                         <div className="flex flex-col gap-2">
                             {navItems.map((item) => {
