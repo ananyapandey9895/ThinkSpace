@@ -1,140 +1,114 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { Home, Zap, Compass, Users, User, Settings, LogOut, LogIn, UserPlus, MessageCircle } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Home, Zap, Compass, Users, User, Settings, LogOut, LogIn, UserPlus, MessageCircle, ChevronDown, ChevronRight, Star, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 
-const Sidebar = () => {
-    const pathname = usePathname();
-    const { isSignedIn, user } = useUser();
-
-    const navItems = [
-        { id: "/", icon: Home, label: "Home" },
-        { id: "/sparks", icon: Zap, label: "Spark Feed" },
-        { id: "/explore", icon: Compass, label: "Explore" },
-        { id: "/messages", icon: MessageCircle, label: "Messages" },
-        { id: "/community", icon: Users, label: "Community" },
-        { id: "/profile", icon: User, label: "Profile" },
-    ];
-
-    const containerVariants = {
-        hidden: { opacity: 0, x: -50 },
-        visible: {
-            opacity: 1,
-            x: 0,
-            transition: {
-                staggerChildren: 0.1,
-                delayChildren: 0.2
-            }
-        }
-    };
-
-    const itemVariants = {
-        hidden: { opacity: 0, x: -20 },
-        visible: { opacity: 1, x: 0 }
-    };
+const SidebarSection = ({ title, children, defaultOpen = true }) => {
+    const [isOpen, setIsOpen] = useState(defaultOpen);
 
     return (
-        <aside className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col z-50">
-            <motion.div
-                className="glass-panel rounded-3xl p-4 flex flex-col gap-2 min-w-[240px] border border-white/20 shadow-2xl backdrop-blur-2xl bg-white/5"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
+        <div className="mb-2">
+            <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="flex items-center justify-between w-full px-4 py-2 text-xs font-bold text-[#1B3C53] uppercase tracking-wider hover:bg-[#D0D0D0] transition-colors"
             >
-                <div className="px-4 py-4 mb-2">
-                    <h1 className="text-2xl font-bold text-[var(--color-primary)]">
-                        ThinkSpace
-                    </h1>
-                </div>
+                <span>{title}</span>
+                {isOpen ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            </button>
+            <AnimatePresence>
+                {isOpen && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden"
+                    >
+                        {children}
+                    </motion.div>
+                )}
+            </AnimatePresence>
+        </div>
+    );
+};
 
-                <nav className="flex flex-col gap-1">
-                    {navItems.map((item) => {
-                        const isActive = pathname === item.id;
-                        return (
-                            <Link key={item.id} href={item.id}>
-                                <motion.div
-                                    variants={itemVariants}
-                                    className={cn(
-                                        "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
-                                        isActive ? "text-[var(--color-primary)]" : "text-slate-500 hover:text-slate-800"
-                                    )}
-                                    whileHover={{ scale: 1.02, x: 4 }}
-                                    whileTap={{ scale: 0.98 }}
-                                >
-                                    {isActive && (
-                                        <motion.div
-                                            layoutId="activePill"
-                                            className="absolute inset-0 bg-[var(--color-primary)]/20 rounded-2xl -z-10"
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                        />
-                                    )}
-                                    <item.icon size={22} className={cn("relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3", isActive && "fill-current")} />
-                                    <span className="font-medium relative z-10">{item.label}</span>
-                                </motion.div>
-                            </Link>
-                        );
-                    })}
-                </nav>
+const SidebarItem = ({ icon: Icon, label, href, isActive }) => (
+    <Link href={href}>
+        <div className={cn(
+            "flex items-center gap-3 px-4 py-2 mx-2 rounded-lg transition-colors text-sm font-medium",
+            isActive
+                ? "bg-[#456882] text-white"
+                : "text-[#1B3C53] hover:bg-[#D0D0D0]"
+        )}>
+            <Icon size={20} className={cn(isActive ? "text-white" : "text-[#234C68]")} />
+            <span>{label}</span>
+        </div>
+    </Link>
+);
 
-                <div className="mt-4 pt-4 border-t border-[var(--color-primary)]/20 flex flex-col gap-1">
-                    {isSignedIn ? (
-                        <>
-                            <Link href="/settings">
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all"
-                                    whileHover={{ scale: 1.02, x: 4 }}
-                                >
-                                    <Settings size={22} />
-                                    <span className="font-medium">Settings</span>
-                                </motion.div>
-                            </Link>
+const Sidebar = ({ isOpen, onClose }) => {
+    const pathname = usePathname();
+    const { isSignedIn } = useUser();
 
+    return (
+        <>
+            {/* Mobile Overlay */}
+            {isOpen && (
+                <div
+                    className="fixed inset-0 bg-black/50 z-40 md:hidden"
+                    onClick={onClose}
+                />
+            )}
+
+            <aside className={cn(
+                "fixed left-0 top-16 bottom-0 w-[270px] bg-[#E3E3E3] border-r border-[#456882] overflow-y-auto z-40 transition-transform duration-300 ease-in-out md:translate-x-0",
+                isOpen ? "translate-x-0" : "-translate-x-full"
+            )}>
+                <div className="py-4">
+                    <SidebarSection title="Feeds">
+                        <SidebarItem icon={Home} label="Home" href="/" isActive={pathname === "/"} />
+                        <SidebarItem icon={TrendingUp} label="Popular" href="/popular" isActive={pathname === "/popular"} />
+                        <SidebarItem icon={Zap} label="Sparks" href="/sparks" isActive={pathname === "/sparks"} />
+                    </SidebarSection>
+
+                    <SidebarSection title="Topics">
+                        <SidebarItem icon={Compass} label="Explore" href="/explore" isActive={pathname === "/explore"} />
+                        <SidebarItem icon={MessageCircle} label="Discussions" href="/messages" isActive={pathname === "/messages"} />
+                        <SidebarItem icon={Users} label="Communities" href="/community" isActive={pathname === "/community"} />
+                    </SidebarSection>
+
+                    <SidebarSection title="Resources">
+                        <SidebarItem icon={Star} label="Premium" href="/premium" isActive={pathname === "/premium"} />
+                        <SidebarItem icon={User} label="Profile" href="/profile" isActive={pathname === "/profile"} />
+                        <SidebarItem icon={Settings} label="Settings" href="/settings" isActive={pathname === "/settings"} />
+                    </SidebarSection>
+
+                    <div className="mt-4 px-4 pt-4 border-t border-[#456882]">
+                        {isSignedIn ? (
                             <SignOutButton>
-                                <motion.button
-                                    variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all w-full text-left"
-                                    whileHover={{ scale: 1.02, x: 4 }}
-                                >
-                                    <LogOut size={22} />
-                                    <span className="font-medium">Sign Out</span>
-                                </motion.button>
+                                <button className="flex items-center gap-3 w-full px-4 py-2 text-sm font-medium text-[#1B3C53] hover:bg-red-100 hover:text-red-700 rounded-lg transition-colors">
+                                    <LogOut size={20} />
+                                    <span>Log Out</span>
+                                </button>
                             </SignOutButton>
-                        </>
-                    ) : (
-                        <>
-                            <Link href="/sign-in">
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-all"
-                                    whileHover={{ scale: 1.02, x: 4 }}
-                                >
-                                    <LogIn size={22} />
-                                    <span className="font-medium">Sign In</span>
-                                </motion.div>
-                            </Link>
-
-                            <Link href="/sign-up">
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/80 transition-all shadow-lg"
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <UserPlus size={22} />
-                                    <span className="font-medium">Sign Up</span>
-                                </motion.div>
-                            </Link>
-                        </>
-                    )}
+                        ) : (
+                            <div className="flex flex-col gap-2">
+                                <Link href="/sign-in" className="w-full py-2 text-center text-sm font-bold text-white bg-[#1B3C53] rounded-full hover:bg-[#234C68] transition-colors">
+                                    Log In
+                                </Link>
+                                <Link href="/sign-up" className="w-full py-2 text-center text-sm font-bold text-[#1B3C53] border border-[#1B3C53] rounded-full hover:bg-[#1B3C53]/10 transition-colors">
+                                    Sign Up
+                                </Link>
+                            </div>
+                        )}
+                    </div>
                 </div>
-            </motion.div>
-        </aside>
+            </aside>
+        </>
     );
 };
 
