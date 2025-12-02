@@ -162,15 +162,7 @@ Contributions are welcome! Follow these steps:
 4. Push and open a Pull Request
 ```
 
----
 
-## 🧑‍💻 Author
-
-Made with ❤️ by **Rudra**
-
-GitHub: [https://github.com/Rudrxxx](https://github.com/Rudrxxx)
-
----
 
 ## 📜 License
 
@@ -178,8 +170,4 @@ This project is open‑source and available under the **MIT License**.
 
 ---
 
-### ⭐ Support
 
-If you find this project interesting, consider giving it a **star**!
-
-> *"The world becomes smarter when people think together."* ✨
