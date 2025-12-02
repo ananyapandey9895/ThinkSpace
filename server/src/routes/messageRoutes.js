@@ -6,6 +6,7 @@ import {
     markConversationAsRead,
     deleteMessage
 } from '../controllers/messageController.js';
+import { setTyping, getTyping } from '../controllers/typingController.js';
 import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
@@ -24,5 +25,9 @@ router.put('/conversation/:conversationId/read', protect, markConversationAsRead
 
 // Delete a message
 router.delete('/:messageId', protect, deleteMessage);
+
+// Typing indicator
+router.post('/typing', protect, setTyping);
+router.get('/typing/:conversationId', protect, getTyping);
 
 export default router;

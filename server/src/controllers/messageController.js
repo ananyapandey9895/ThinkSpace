@@ -4,13 +4,12 @@ import Conversation from '../models/Conversation.js';
 // Send a new message
 export const sendMessage = async (req, res) => {
     try {
-        const { conversationId, senderId, content, type = 'text' } = req.body;
+        const { conversationId, senderId, content, type = 'text', attachments = [] } = req.body;
 
         if (!conversationId || !senderId || !content) {
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        // Verify conversation exists and user is a participant
         const conversation = await Conversation.findById(conversationId);
         if (!conversation) {
             return res.status(404).json({ error: 'Conversation not found' });
@@ -20,18 +19,17 @@ export const sendMessage = async (req, res) => {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Create the message
         const message = new Message({
             conversationId,
             senderId,
             content,
             type,
-            readBy: [senderId] // Sender has read their own message
+            attachments,
+            readBy: [{ userId: senderId, seenAt: new Date() }]
         });
 
         await message.save();
 
-        // Update conversation's last message
         conversation.lastMessage = message._id;
         conversation.lastMessageAt = message.createdAt;
         await conversation.save();
@@ -100,9 +98,9 @@ export const markAsRead = async (req, res) => {
             return res.status(404).json({ error: 'Message not found' });
         }
 
-        // Add user to readBy array if not already there
-        if (!message.readBy.includes(userId)) {
-            message.readBy.push(userId);
+        const alreadyRead = message.readBy.some(r => r.userId === userId);
+        if (!alreadyRead) {
+            message.readBy.push({ userId, seenAt: new Date() });
             await message.save();
         }
 
@@ -133,17 +131,16 @@ export const markConversationAsRead = async (req, res) => {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Update all unread messages
-        await Message.updateMany(
-            {
-                conversationId,
-                readBy: { $ne: userId },
-                deleted: false
-            },
-            {
-                $addToSet: { readBy: userId }
-            }
-        );
+        const messages = await Message.find({
+            conversationId,
+            deleted: false,
+            'readBy.userId': { $ne: userId }
+        });
+
+        for (const msg of messages) {
+            msg.readBy.push({ userId, seenAt: new Date() });
+            await msg.save();
+        }
 
         res.json({ message: 'Messages marked as read' });
     } catch (error) {

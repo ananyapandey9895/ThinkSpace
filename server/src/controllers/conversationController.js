@@ -11,7 +11,8 @@ export const getConversations = async (req, res) => {
         }
 
         const conversations = await Conversation.find({
-            participants: userId
+            participants: userId,
+            deletedBy: { $ne: userId }
         })
             .populate('lastMessage')
             .sort({ lastMessageAt: -1 });
@@ -83,7 +84,7 @@ export const createConversation = async (req, res) => {
     }
 };
 
-// Delete a conversation
+// Delete a conversation (soft delete)
 export const deleteConversation = async (req, res) => {
     try {
         const { id } = req.params;
@@ -99,18 +100,24 @@ export const deleteConversation = async (req, res) => {
             return res.status(404).json({ error: 'Conversation not found' });
         }
 
-        // Check if user is a participant
         if (!conversation.participants.includes(userId)) {
             return res.status(403).json({ error: 'Access denied' });
         }
 
-        // Delete all messages in the conversation
-        await Message.deleteMany({ conversationId: id });
+        if (!conversation.deletedBy) conversation.deletedBy = [];
+        
+        if (!conversation.deletedBy.includes(userId)) {
+            conversation.deletedBy.push(userId);
+        }
 
-        // Delete the conversation
-        await Conversation.findByIdAndDelete(id);
+        if (conversation.deletedBy.length === conversation.participants.length) {
+            await Message.deleteMany({ conversationId: id });
+            await Conversation.findByIdAndDelete(id);
+            return res.json({ message: 'Conversation permanently deleted' });
+        }
 
-        res.json({ message: 'Conversation deleted successfully' });
+        await conversation.save();
+        res.json({ message: 'Conversation deleted for you' });
     } catch (error) {
         console.error('Error deleting conversation:', error);
         res.status(500).json({ error: 'Failed to delete conversation' });

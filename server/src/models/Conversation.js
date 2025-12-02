@@ -12,7 +12,8 @@ const conversationSchema = new mongoose.Schema({
   lastMessageAt: {
     type: Date,
     default: Date.now
-  }
+  },
+  deletedBy: [String]
 }, { timestamps: true });
 
 // Index for faster queries
