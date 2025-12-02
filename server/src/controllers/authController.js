@@ -12,8 +12,8 @@ export const registerUser = async (req, res) => {
       return res.status(400).json({ message: "User already exists with this email" });
     }
 
-
-    const user = new User({ name, email, password });
+    const handle = email.split('@')[0] + Math.floor(Math.random() * 1000);
+    const user = new User({ name, email, password, handle });
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -23,8 +23,10 @@ export const registerUser = async (req, res) => {
     res.status(201).json({
       token,
       user: {
+        id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        handle: user.handle
       }
     });
   } catch (error) {
@@ -40,13 +42,12 @@ export const loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email }).select('+password');
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await user.matchPassword(password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
@@ -58,6 +59,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       token,
       user: {
+        id: user._id,
         name: user.name,
         email: user.email
       }

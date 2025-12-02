@@ -1,6 +1,7 @@
 import express from 'express';
 import crypto from 'crypto';
 import Post from '../models/Post.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -26,31 +27,93 @@ router.get('/:id', async (req, res) => {
 });
 
 // Create a post
-router.post('/create', async (req, res) => {
-    const { content, image, userId } = req.body;
+router.post('/create', protect, async (req, res) => {
+    const { content, image, type, caption } = req.body;
     try {
         let postImage = image;
-        if (!postImage) {
+        if (!postImage && type === 'visual') {
             postImage = `https://picsum.photos/seed/${crypto.randomUUID()}/800/600`;
         }
-        const newPost = new Post({ content, image: postImage, user: userId });
+        const newPost = new Post({ content, caption, image: postImage, user: req.userId, type });
         await newPost.save();
-        res.status(201).json(newPost);
+        const populated = await Post.findById(newPost._id).populate('user');
+        res.status(201).json(populated);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 });
 
-// Spark (Like) a post
-router.post('/:id/spark', async (req, res) => {
+// Update a post
+router.put('/:id', protect, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+        if (post.user.toString() !== req.userId) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        const { content, caption, image } = req.body;
+        if (content !== undefined) post.content = content;
+        if (caption !== undefined) post.caption = caption;
+        if (image !== undefined) post.image = image;
+
+        await post.save();
+        const updated = await Post.findById(post._id).populate('user');
+        res.json(updated);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete a post
+router.delete('/:id', protect, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+        if (post.user.toString() !== req.userId) {
+            return res.status(403).json({ message: 'Not authorized' });
+        }
+
+        await post.deleteOne();
+        res.json({ message: 'Post deleted' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Like/Unlike a post
+router.post('/:id/like', protect, async (req, res) => {
     try {
         const post = await Post.findById(req.params.id);
         if (!post) return res.status(404).json({ message: 'Post not found' });
 
-        post.likes += 1;
-        await post.save();
+        const userIndex = post.likes.indexOf(req.userId);
+        if (userIndex > -1) {
+            post.likes.splice(userIndex, 1);
+        } else {
+            post.likes.push(req.userId);
+        }
 
-        res.json({ stats: { likes: post.likes } });
+        await post.save();
+        res.json({ likes: post.likes.length, liked: userIndex === -1 });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Legacy spark endpoint (for backward compatibility)
+router.post('/:id/spark', protect, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) return res.status(404).json({ message: 'Post not found' });
+
+        const userIndex = post.likes.indexOf(req.userId);
+        if (userIndex === -1) {
+            post.likes.push(req.userId);
+        }
+
+        await post.save();
+        res.json({ stats: { likes: post.likes.length } });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

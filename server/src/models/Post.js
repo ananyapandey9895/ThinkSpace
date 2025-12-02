@@ -5,8 +5,7 @@ const postSchema = new mongoose.Schema({
     content: { type: String },
     caption: { type: String },
     image: { type: String },
-    likes: { type: Number, default: 0 },
-    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+    likes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     category: { type: String },
     type: { type: String, enum: ['thought', 'visual'], default: 'thought' }
 }, { timestamps: true });

@@ -2,11 +2,14 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import mongoose from "mongoose";
+import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import reflectionRoutes from "./routes/reflectionRoutes.js";
 import noteRoutes from "./routes/noteRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
 import postRoutes from "./routes/posts.js";
+import commentRoutes from "./routes/commentRoutes.js";
+import spaceRoutes from "./routes/spaceRoutes.js";
 import exploreRoutes from "./routes/exploreRoutes.js";
 import messageRoutes from "./routes/messageRoutes.js";
 import conversationRoutes from "./routes/conversationRoutes.js";
@@ -14,17 +17,23 @@ import conversationRoutes from "./routes/conversationRoutes.js";
 dotenv.config();
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  credentials: true
+}));
 
 app.get("/", (req, res) => {
   res.send("🚀 ThinkSpace backend is running successfully!");
 });
 
+app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/reflection", reflectionRoutes);
 app.use("/api/notes", noteRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/posts", postRoutes);
+app.use("/api", commentRoutes);
+app.use("/api/spaces", spaceRoutes);
 app.use("/api/explore", exploreRoutes);
 app.use("/api/messages", messageRoutes);
 app.use("/api/conversations", conversationRoutes);
