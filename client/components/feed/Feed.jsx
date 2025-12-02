@@ -5,9 +5,9 @@ import { Zap, Moon, Brain, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
 
 const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
-    const [sparks, setSparks] = React.useState(post.likes?.length || 0);
-    const [dims, setDims] = React.useState(0);
-    const [thoughts, setThoughts] = React.useState(post.commentCount || 0);
+    const [sparks, setSparks] = React.useState(post.sparks || 0);
+    const [dims, setDims] = React.useState(post.dims || 0);
+    const [thoughts, setThoughts] = React.useState(post.thoughts || 0);
 
     const handleSpark = (e) => {
         e.stopPropagation();
@@ -37,18 +37,20 @@ const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
             <div className="flex-1 p-2 md:p-3">
                 <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
                     <div className="flex items-center gap-1">
-                        <img src={post.user?.imageUrl || post.user?.avatar || post.user?.image || `https://ui-avatars.com/api/?name=${post.user?.name}`} alt={post.user?.name} className="w-5 h-5 rounded-full" />
-                        <span className="font-bold text-slate-900 hover:underline">{post.user?.name || 'Anonymous'}</span>
+                        <img src={post.user?.image || post.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.user?.name || post.author || 'User')}&background=random`} alt={post.user?.name || post.author || 'User'} className="w-5 h-5 rounded-full" />
+                        <span className="font-bold text-slate-900 hover:underline">{(post.user?.name || post.author || 'user').split(' ').pop()}</span>
                     </div>
+                    <span>•</span>
+                    <span>Posted by u/{(post.user?.username || post.user?.name || post.author || 'user').split(' ').pop()}</span>
                     <span>•</span>
                     <span>{new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
                 </div>
 
                 <div onClick={onThoughtsClick}>
                     <h3 className="text-lg font-medium text-slate-900 mb-2 leading-snug">{post.content || post.caption}</h3>
-                    {(post.media?.[0] || post.image) && (
+                    {post.image && (
                         <div className="mt-3 mb-3 rounded-lg overflow-hidden border border-slate-200 bg-black/5 max-h-[500px] flex justify-center">
-                            <img src={post.media?.[0] || post.image} alt="Post content" className="max-w-full max-h-[500px] object-contain" />
+                            <img src={post.image} alt="Post content" className="max-w-full max-h-[500px] object-contain" />
                         </div>
                     )}
                 </div>
