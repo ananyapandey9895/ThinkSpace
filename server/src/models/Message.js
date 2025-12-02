@@ -21,7 +21,12 @@ const messageSchema = new mongoose.Schema({
         default: 'text'
     },
     readBy: [{
-        type: String // Clerk user IDs
+        userId: String,
+        seenAt: { type: Date, default: Date.now }
+    }],
+    attachments: [{
+        url: String,
+        type: { type: String, enum: ['image', 'video', 'audio', 'file'] }
     }],
     deleted: {
         type: Boolean,
