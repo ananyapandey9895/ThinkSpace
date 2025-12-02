@@ -4,12 +4,12 @@ import React, { useState } from "react";
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
-const MainLayout = ({ children }) => {
+const MainLayout = ({ children, onPostCreated }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     return (
         <div className="min-h-screen bg-[#DAE0E6]">
-            <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} />
+            <Navbar onMenuClick={() => setIsSidebarOpen(!isSidebarOpen)} onPostCreated={onPostCreated} />
 
             <Sidebar
                 isOpen={isSidebarOpen}

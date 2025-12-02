@@ -7,6 +7,8 @@ import { Zap, Users, Settings, UserPlus } from "lucide-react";
 import ProfileTabs from "./ProfileTabs";
 import PostGrid from "./PostGrid";
 import { motion, useScroll, useTransform, useSpring, useInView } from "framer-motion";
+import { api } from "@/lib/api";
+import { useUser } from "@clerk/nextjs";
 
 const AnimatedCounter = ({ value, label }) => {
     const ref = useRef(null);
@@ -57,32 +59,50 @@ const AnimatedCounter = ({ value, label }) => {
 const ProfileContent = ({ user }) => {
     const [activeTab, setActiveTab] = useState("sparks");
     const [isFollowing, setIsFollowing] = useState(false);
+    const [profileData, setProfileData] = useState(null);
+    const [stats, setStats] = useState({ postCount: 0, followerCount: 0, followingCount: 0 });
+    const [spaces, setSpaces] = useState([]);
+    const { user: currentUser } = useUser();
+    const isOwnProfile = currentUser?.username === user.username;
     const coverRef = useRef(null);
     const { scrollY } = useScroll();
     const y = useTransform(scrollY, [0, 300], [0, 100]);
     const opacity = useTransform(scrollY, [0, 300], [1, 0.3]);
 
-    const handleFollow = () => {
-        const newFollowingState = !isFollowing;
-        setIsFollowing(newFollowingState);
-        
-        if (newFollowingState) {
-            const followedUsers = JSON.parse(localStorage.getItem('followedUsers') || '[]');
-            const userExists = followedUsers.some(u => u.username === user.username);
-            if (!userExists) {
-                followedUsers.push({
-                    username: user.username || user.firstName?.toLowerCase(),
-                    fullName: user.fullName,
-                    imageUrl: user.imageUrl
+    useEffect(() => {
+        const fetchProfileData = async () => {
+            try {
+                const handle = user.username || user.firstName?.toLowerCase();
+                const profile = await api.getUserProfile(handle);
+                setProfileData(profile);
+                setStats({
+                    postCount: profile.postCount || 0,
+                    followerCount: profile.followerCount || 0,
+                    followingCount: profile.followingCount || 0
                 });
-                localStorage.setItem('followedUsers', JSON.stringify(followedUsers));
-                window.dispatchEvent(new Event('followedUsersUpdated'));
+                
+                if (profile._id) {
+                    const userSpaces = await api.getUserSpaces(profile._id);
+                    setSpaces(userSpaces || []);
+                }
+            } catch (error) {
+                console.error('Failed to fetch profile:', error);
             }
-        } else {
-            const followedUsers = JSON.parse(localStorage.getItem('followedUsers') || '[]');
-            const filtered = followedUsers.filter(u => u.username !== user.username);
-            localStorage.setItem('followedUsers', JSON.stringify(filtered));
-            window.dispatchEvent(new Event('followedUsersUpdated'));
+        };
+        fetchProfileData();
+    }, [user]);
+
+    const handleFollow = async () => {
+        if (!profileData?._id) return;
+        try {
+            await api.toggleFollow(profileData._id);
+            setIsFollowing(!isFollowing);
+            setStats(prev => ({
+                ...prev,
+                followerCount: isFollowing ? prev.followerCount - 1 : prev.followerCount + 1
+            }));
+        } catch (error) {
+            console.error('Failed to toggle follow:', error);
         }
     };
 
@@ -142,9 +162,9 @@ const ProfileContent = ({ user }) => {
 
                         <div className="hidden md:flex flex-1 justify-end items-end mb-4">
                             <div className="flex gap-12">
-                                <AnimatedCounter value="5.4k" label="Sparks" />
-                                <AnimatedCounter value="1.2k" label="Thoughts" />
-                                <AnimatedCounter value="3.5k" label="Followers" />
+                                <AnimatedCounter value={stats.postCount.toString()} label="Posts" />
+                                <AnimatedCounter value={stats.followingCount.toString()} label="Following" />
+                                <AnimatedCounter value={stats.followerCount.toString()} label="Followers" />
                             </div>
                         </div>
                     </div>
@@ -161,46 +181,50 @@ const ProfileContent = ({ user }) => {
                             </p>
 
                             <div className="flex gap-4 mt-4 text-sm text-slate-500 font-medium">
-                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Zap size={16} /> 2 spaces</span>
-                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Users size={16} /> 7 thinkers</span>
+                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Zap size={16} /> {spaces.length} spaces</span>
+                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Users size={16} /> {stats.followerCount} thinkers</span>
                             </div>
-                            <button
-                                onClick={handleFollow}
-                                className={`hidden md:block mt-6 py-2 px-6 rounded-full font-bold transition-all ${
-                                    isFollowing
-                                        ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
-                                        : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
-                                }`}
-                            >
-                                {isFollowing ? 'Following' : 'Follow'}
-                            </button>
+                            {!isOwnProfile && (
+                                <button
+                                    onClick={handleFollow}
+                                    className={`hidden md:block mt-6 py-2 px-6 rounded-full font-bold transition-all ${
+                                        isFollowing
+                                            ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
+                                            : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
+                                    }`}
+                                >
+                                    {isFollowing ? 'Following' : 'Follow'}
+                                </button>
+                            )}
                         </div>
 
                         <div className="flex md:hidden flex-col gap-4">
                             <div className="flex justify-between border-t border-b border-[var(--color-primary)]/20 py-4">
                                 <div className="text-center">
-                                    <span className="block text-xl font-bold text-slate-800">5.4k</span>
-                                    <span className="text-sm text-slate-500 font-medium">Sparks</span>
+                                    <span className="block text-xl font-bold text-slate-800">{stats.postCount}</span>
+                                    <span className="text-sm text-slate-500 font-medium">Posts</span>
                                 </div>
                                 <div className="text-center">
-                                    <span className="block text-xl font-bold text-slate-800">1.2k</span>
-                                    <span className="text-sm text-slate-500 font-medium">Thoughts</span>
+                                    <span className="block text-xl font-bold text-slate-800">{stats.followingCount}</span>
+                                    <span className="text-sm text-slate-500 font-medium">Following</span>
                                 </div>
                                 <div className="text-center">
-                                    <span className="block text-xl font-bold text-slate-800">3.5k</span>
+                                    <span className="block text-xl font-bold text-slate-800">{stats.followerCount}</span>
                                     <span className="text-sm text-slate-500 font-medium">Followers</span>
                                 </div>
                             </div>
-                            <button
-                                onClick={handleFollow}
-                                className={`w-full py-2 px-4 rounded-full font-bold transition-all ${
-                                    isFollowing
-                                        ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
-                                        : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
-                                }`}
-                            >
-                                {isFollowing ? 'Following' : 'Follow'}
-                            </button>
+                            {!isOwnProfile && (
+                                <button
+                                    onClick={handleFollow}
+                                    className={`w-full py-2 px-4 rounded-full font-bold transition-all ${
+                                        isFollowing
+                                            ? 'bg-slate-200 text-slate-900 hover:bg-slate-300'
+                                            : 'bg-[#1B3C53] text-white hover:bg-[#234C68]'
+                                    }`}
+                                >
+                                    {isFollowing ? 'Following' : 'Follow'}
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -228,11 +252,24 @@ const ProfileContent = ({ user }) => {
                 )}
 
                 {activeTab === "spaces" && (
-                    <div className="text-center py-20 text-slate-400 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                        <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                            <Settings size={24} className="text-slate-400" />
-                        </div>
-                        <p>No spaces created yet.</p>
+                    <div className="animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        {spaces.length > 0 ? (
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                {spaces.map(space => (
+                                    <div key={space._id} className="p-4 bg-white rounded-lg border border-slate-200">
+                                        <h3 className="font-bold text-slate-800">{space.name}</h3>
+                                        <p className="text-sm text-slate-500">{space.members?.length || 0} members</p>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-center py-20 text-slate-400">
+                                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                                    <Settings size={24} className="text-slate-400" />
+                                </div>
+                                <p>No spaces yet.</p>
+                            </div>
+                        )}
                     </div>
                 )}
             </div>

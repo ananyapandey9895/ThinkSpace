@@ -1,103 +1,97 @@
 "use client";
 
-// import { useState, useEffect } from "react";
-// import MainLayout from "@/components/MainLayout";
 import { useState, useEffect } from "react";
-// import MainLayout from "@/components/MainLayout";
 import MainLayout from "@/components/layout/MainLayout";
 import { Zap, CloudRain, Brain } from "lucide-react";
 import SparkCommentModal from "@/components/feed/SparkCommentModal";
+import { api } from "@/lib/api";
 export default function SparkFeed() {
-    const uniqueMessages = [
-        "Just shipped a new feature! The feeling of seeing your code in production is unmatched. 🚀",
-        "Hot take: The best code is the code you don't have to write. Embrace simplicity!",
-        "Why do programmers prefer dark mode? Because light attracts bugs! 😄",
-        "Taking a break from coding to enjoy nature. Sometimes the best debugging happens away from the screen. 🌲",
-        "Reading 'Clean Code' again. Every time I read it, I find something new to improve in my work.",
-        "Coffee + Code + Music = Perfect morning vibes ☕💻🎵",
-        "Refactored 200 lines into 50. Feels like a personal victory! Less is more.",
-        "Stuck on a bug for 3 hours. Took a walk. Solved it in 5 minutes. Never underestimate the power of stepping away.",
-        "Started learning Rust today. The compiler is tough but fair. Excited for this journey!",
-        "Pair programming session was incredibly productive today. Two heads are definitely better than one!",
-        "Working out keeps my mind sharp for coding. Physical health = Mental health = Better code.",
-        "TypeScript has changed how I write JavaScript. Type safety is a game changer!",
-        "Deployed to prod on a Friday. Living dangerously! (Don't do this at home 😅)",
-        "Documentation is love. Documentation is life. Future me will thank present me.",
-        "Imposter syndrome is real, but so is your progress. Keep pushing forward! 💪",
-        "The sunset today was absolutely stunning. Sometimes we need to look up from our screens. 🌅",
-        "Code review feedback isn't personal. It's about making the product better. Grateful for good teammates!",
-        "Automated tests saved me from a critical bug today. Write those tests, folks!",
-        "Learning in public is intimidating but rewarding. Sharing my journey and loving the community support!",
-        "Side project Sunday! Working on something exciting. Can't wait to share it with you all. 🎨"
-    ];
-
-    const [sparks, setSparks] = useState(
-        Array.from({ length: 200 }).map((_, i) => ({
-            _id: `${i + 1}`,
-            user: {
-                name: `User ${i + 1}`,
-                handle: `@user${i + 1}`,
-                avatar: `https://ui-avatars.com/api/?name=User+${i + 1}&background=random`
-            },
-            content: uniqueMessages[i % uniqueMessages.length],
-            likes: Math.floor(Math.random() * 500),
-            comments: Math.floor(Math.random() * 50),
-            shares: Math.floor(Math.random() * 20),
-            createdAt: new Date(Date.now() - Math.floor(Math.random() * 10000000)).toISOString()
-        }))
-    );
+    const [sparks, setSparks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [newSparkContent, setNewSparkContent] = useState("");
     const [selectedSpark, setSelectedSpark] = useState(null);
 
     useEffect(() => {
-        setTimeout(() => setLoading(false), 1000);
+        const fetchSparks = async () => {
+            try {
+                const posts = await api.getPosts();
+                setSparks(posts.map(post => ({
+                    ...post,
+                    user: {
+                        name: post.user?.name || 'Anonymous',
+                        handle: `@${post.user?.handle || post.user?.username || 'user'}`,
+                        avatar: post.user?.imageUrl || post.user?.avatar || `https://ui-avatars.com/api/?name=${post.user?.name || 'User'}&background=random`
+                    },
+                    likes: post.likes?.length || 0,
+                    comments: post.commentCount || 0,
+                    shares: post.shares || 0
+                })));
+            } catch (error) {
+                console.error('Failed to fetch sparks:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSparks();
     }, []);
 
-    const handlePostSpark = () => {
+    const handlePostSpark = async () => {
         if (!newSparkContent.trim()) return;
-
-        const newSpark = {
-            _id: `new-${Date.now()}`,
-            user: {
-                name: "You",
-                handle: "@you",
-                avatar: "https://ui-avatars.com/api/?name=You&background=random"
-            },
-            content: newSparkContent,
-            likes: 0,
-            comments: 0,
-            shares: 0,
-            createdAt: new Date().toISOString()
-        };
-
-        setSparks([newSpark, ...sparks]);
-        setNewSparkContent("");
+        try {
+            const newPost = await api.createPost({ content: newSparkContent, type: 'thought' });
+            const newSpark = {
+                ...newPost,
+                user: {
+                    name: newPost.user?.name || "You",
+                    handle: `@${newPost.user?.handle || 'you'}`,
+                    avatar: newPost.user?.imageUrl || "https://ui-avatars.com/api/?name=You&background=random"
+                },
+                likes: 0,
+                comments: 0,
+                shares: 0
+            };
+            setSparks([newSpark, ...sparks]);
+            setNewSparkContent("");
+        } catch (error) {
+            console.error('Failed to create spark:', error);
+        }
     };
 
-    const handleInteraction = (id, type) => {
+    const handleInteraction = async (id, type) => {
         if (type === 'comments') {
             const spark = sparks.find(s => s._id === id);
             if (spark) setSelectedSpark(spark);
             return;
         }
 
-        setSparks(prevSparks => prevSparks.map(spark => {
-            if (spark._id === id) {
-                return { ...spark, [type]: spark[type] + 1 };
+        if (type === 'likes') {
+            try {
+                await api.likePost(id);
+                setSparks(prevSparks => prevSparks.map(spark => {
+                    if (spark._id === id) {
+                        return { ...spark, likes: spark.likes + 1 };
+                    }
+                    return spark;
+                }));
+            } catch (error) {
+                console.error('Failed to like spark:', error);
             }
-            return spark;
-        }));
+        }
     };
 
-    const handleCommentSubmit = (sparkId) => {
-        setSparks(prevSparks => prevSparks.map(spark => {
-            if (spark._id === sparkId) {
-                return { ...spark, comments: spark.comments + 1 };
-            }
-            return spark;
-        }));
-        setSelectedSpark(null);
+    const handleCommentSubmit = async (sparkId, text) => {
+        try {
+            await api.createComment(sparkId, text);
+            setSparks(prevSparks => prevSparks.map(spark => {
+                if (spark._id === sparkId) {
+                    return { ...spark, comments: spark.comments + 1 };
+                }
+                return spark;
+            }));
+            setSelectedSpark(null);
+        } catch (error) {
+            console.error('Failed to submit comment:', error);
+        }
     };
 
     return (
