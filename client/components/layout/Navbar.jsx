@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Search, Menu, X, Bell, Plus, MessageSquare, User } from "lucide-react";
+import { Search, Menu, X, Bell, Plus, User } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { motion, AnimatePresence } from "framer-motion";
 import CreatePostModal from "@/components/ui/CreatePostModal";
@@ -58,9 +58,7 @@ const Navbar = ({ onMenuClick, onPostCreated }) => {
                         <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border border-[#1B3C53]"></span>
                     </button>
 
-                    <button className="p-2 hover:bg-[#234C68] rounded-full text-white">
-                        <MessageSquare size={20} />
-                    </button>
+
 
                     <div className="ml-2">
                         <UserButton afterSignOutUrl="/sign-in" />

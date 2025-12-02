@@ -13,8 +13,8 @@ export default function GroupChatPage() {
     const { id } = useParams();
     const { user } = useUser();
     const [messages, setMessages] = useState([
-        { id: 1, user: "John Doe", avatar: "https://ui-avatars.com/api/?name=John+Doe&background=random", text: "Welcome to the group!", time: "10:30 AM" },
-        { id: 2, user: "Jane Smith", avatar: "https://ui-avatars.com/api/?name=Jane+Smith&background=random", text: "Hey everyone! Excited to be here", time: "10:32 AM" },
+        { id: 1, user: "Rahul", avatar: "https://ui-avatars.com/api/?name=Rahul&background=random", text: "Welcome to the group!", time: "10:30 AM" },
+        { id: 2, user: "Priya", avatar: "https://ui-avatars.com/api/?name=Priya&background=random", text: "Hey everyone! Excited to be here", time: "10:32 AM" },
     ]);
     const [newMessage, setNewMessage] = useState("");
     const messagesEndRef = useRef(null);

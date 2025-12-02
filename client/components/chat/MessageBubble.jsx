@@ -12,7 +12,7 @@ const MessageBubble = ({ message, isOwn, senderName }) => {
 
     return (
         <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             className={cn(
                 "flex mb-4 group",
@@ -31,7 +31,7 @@ const MessageBubble = ({ message, isOwn, senderName }) => {
                             : "bg-slate-100 text-slate-800 rounded-bl-md"
                     )}
                 >
-                    <p className="text-sm leading-relaxed">{message.content}</p>
+                    <p className="text-sm leading-relaxed" style={isOwn ? {color: '#FFFFFF'} : {}}>{message.content}</p>
                 </div>
                 <p
                     className={cn(

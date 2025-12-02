@@ -37,11 +37,11 @@ const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
             <div className="flex-1 p-2 md:p-3">
                 <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
                     <div className="flex items-center gap-1">
-                        <img src={post.user.image} alt={post.user.name} className="w-5 h-5 rounded-full" />
-                        <span className="font-bold text-slate-900 hover:underline">r/webnerrr</span>
+                        <img src={post.user?.image || post.user?.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(post.user?.name || post.author || 'User')}&background=random`} alt={post.user?.name || post.author || 'User'} className="w-5 h-5 rounded-full" />
+                        <span className="font-bold text-slate-900 hover:underline">{(post.user?.name || post.author || 'user').split(' ').pop()}</span>
                     </div>
                     <span>•</span>
-                    <span>Posted by u/webnerrr</span>
+                    <span>Posted by u/{(post.user?.username || post.user?.name || post.author || 'user').split(' ').pop()}</span>
                     <span>•</span>
                     <span>{new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
                 </div>

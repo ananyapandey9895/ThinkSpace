@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "ThinkSpace - Light Mode Anti-Gravity",
+  title: "ThinkSpace - Blog Platform",
   description: "A beautiful social platform with ethereal glassmorphism design",
 };
 
