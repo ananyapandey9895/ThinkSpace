@@ -145,11 +145,11 @@ export default function SparkFeed() {
                                         }}
                                     />
                                     <div className="flex justify-between items-center mt-4 pt-4 border-t border-slate-50">
-                                        <div className="flex gap-2 text-indigo-500"></div>
+                                        <div className="flex gap-2 text-[var(--color-primary)]"></div>
                                         <button
                                             onClick={handlePostSpark}
                                             disabled={!newSparkContent.trim()}
-                                            className="bg-indigo-600 text-white px-4 py-2 rounded-full font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                            className="bg-[var(--color-primary)] text-white px-4 py-2 rounded-full font-medium hover:bg-[var(--color-primary)]/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                                         >
                                             Spark
                                         </button>
@@ -173,21 +173,21 @@ export default function SparkFeed() {
                                         <div className="flex gap-6 text-slate-500">
                                             <button
                                                 onClick={() => handleInteraction(spark._id, 'likes')}
-                                                className="flex items-center gap-2 hover:text-yellow-500 transition-colors"
+                                                className="flex items-center gap-2 hover:text-[var(--color-accent)] transition-colors"
                                             >
                                                 <Zap size={20} className="fill-current" />
                                                 <span>{spark.likes}</span>
                                             </button>
                                             <button
                                                 onClick={() => handleInteraction(spark._id, 'shares')}
-                                                className="flex items-center gap-2 hover:text-blue-500 transition-colors"
+                                                className="flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors"
                                             >
                                                 <CloudRain size={20} />
                                                 <span>{spark.shares}</span>
                                             </button>
                                             <button
                                                 onClick={() => handleInteraction(spark._id, 'comments')}
-                                                className="flex items-center gap-2 hover:text-indigo-500 transition-colors"
+                                                className="flex items-center gap-2 hover:text-[var(--color-primary)] transition-colors"
                                             >
                                                 <Brain size={20} />
                                                 <span>{spark.comments}</span>

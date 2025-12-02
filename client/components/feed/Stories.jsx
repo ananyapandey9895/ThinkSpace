@@ -145,7 +145,7 @@ const Stories = () => {
                             className="flex-shrink-0 cursor-pointer"
                             onClick={() => setSelectedStory(userStories[userStories.length - 1])}
                         >
-                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#72B7BF] via-[#5da3ab] to-[#72B7BF] p-[3px]">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-primary)] to-[var(--color-primary)] p-[3px]">
                                 <div className="w-full h-full rounded-full bg-white p-[2px]">
                                     <img src={user?.imageUrl || "https://ui-avatars.com/api/?name=You"} alt="Your story" className="w-full h-full rounded-full object-cover" />
                                 </div>
@@ -160,12 +160,12 @@ const Stories = () => {
                             onClick={() => setShowUpload(true)}
                         >
                             <div className="relative">
-                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#72B7BF] to-[#5da3ab] p-[3px]">
+                                <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] p-[3px]">
                                     <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
                                         <img src={user?.imageUrl || "https://ui-avatars.com/api/?name=You"} alt="Your story" className="w-full h-full rounded-full object-cover" />
                                     </div>
                                 </div>
-                                <div className="absolute bottom-0 right-0 w-6 h-6 bg-[#72B7BF] rounded-full flex items-center justify-center border-2 border-white">
+                                <div className="absolute bottom-0 right-0 w-6 h-6 bg-[var(--color-primary)] rounded-full flex items-center justify-center border-2 border-white">
                                     <Plus className="h-4 w-4 text-white" />
                                 </div>
                             </div>
@@ -181,7 +181,7 @@ const Stories = () => {
                             className="flex-shrink-0 cursor-pointer"
                             onClick={() => setSelectedStory(story)}
                         >
-                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#72B7BF] via-[#5da3ab] to-[#72B7BF] p-[3px]">
+                            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[var(--color-primary)] via-[var(--color-primary)] to-[var(--color-primary)] p-[3px]">
                                 <div className="w-full h-full rounded-full bg-white p-[2px]">
                                     <img src={story.user.avatar} alt={story.user.name} className="w-full h-full rounded-full object-cover" />
                                 </div>
@@ -237,7 +237,7 @@ const Stories = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <label className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-[#72B7BF] transition-colors cursor-pointer block">
+                                <label className="border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:border-[var(--color-primary)] transition-colors cursor-pointer block">
                                     <input 
                                         type="file" 
                                         accept="image/*" 
@@ -253,7 +253,7 @@ const Stories = () => {
                             <button 
                                 onClick={handleShareStory}
                                 disabled={!uploadedImage}
-                                className="w-full mt-4 py-3 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full mt-4 py-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 Share Story
                             </button>

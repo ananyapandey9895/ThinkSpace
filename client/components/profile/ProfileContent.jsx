@@ -66,10 +66,10 @@ const ProfileContent = ({ user }) => {
             <div className="relative mb-8">
                 <motion.div
                     ref={coverRef}
-                    className="h-64 md:h-80 rounded-3xl overflow-hidden shadow-lg shadow-teal-100 relative"
+                    className="h-64 md:h-80 rounded-3xl overflow-hidden shadow-lg shadow-[var(--color-accent)]/30 relative"
                     style={{ y, opacity }}
                 >
-                    <div className="absolute inset-0 bg-[#72B7BF]" />
+                    <div className="absolute inset-0 bg-[var(--color-primary)]" />
                     <motion.img
                         src="https://images.unsplash.com/photo-1614850523459-c2f4c699c52e?w=1200&q=80"
                         alt="Cover"
@@ -94,7 +94,7 @@ const ProfileContent = ({ user }) => {
                                 <img src={user.imageUrl} alt={user.fullName || "User"} className="w-32 h-32 md:w-40 md:h-40 rounded-full border-4 border-white shadow-xl object-cover" />
                             </motion.div>
                             <motion.div
-                                className="absolute bottom-2 right-2 bg-[#72B7BF] text-white text-xs font-bold px-3 py-1.5 rounded-full border-2 border-white shadow-md flex items-center gap-1.5 overflow-hidden"
+                                className="absolute bottom-2 right-2 bg-[var(--color-primary)] text-white text-xs font-bold px-3 py-1.5 rounded-full border-2 border-white shadow-md flex items-center gap-1.5 overflow-hidden"
                                 whileHover={{ scale: 1.1 }}
                                 animate={{
                                     boxShadow: [
@@ -136,12 +136,12 @@ const ProfileContent = ({ user }) => {
                             </p>
 
                             <div className="flex gap-4 mt-4 text-sm text-slate-500 font-medium">
-                                <span className="flex items-center gap-1 hover:text-[#72B7BF] cursor-pointer transition-colors"><Zap size={16} /> 2 spaces</span>
-                                <span className="flex items-center gap-1 hover:text-[#72B7BF] cursor-pointer transition-colors"><Users size={16} /> 7 thinkers</span>
+                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Zap size={16} /> 2 spaces</span>
+                                <span className="flex items-center gap-1 hover:text-[var(--color-primary)] cursor-pointer transition-colors"><Users size={16} /> 7 thinkers</span>
                             </div>
                         </div>
 
-                        <div className="flex md:hidden justify-between border-t border-b border-[#72B7BF]/20 py-4">
+                        <div className="flex md:hidden justify-between border-t border-b border-[var(--color-primary)]/20 py-4">
                             <div className="text-center">
                                 <span className="block text-xl font-bold text-slate-800">5.4k</span>
                                 <span className="text-sm text-slate-500 font-medium">Sparks</span>

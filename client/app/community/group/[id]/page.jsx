@@ -57,12 +57,12 @@ export default function GroupChatPage() {
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 h-[calc(100vh-100px)]">
                 <div className="flex flex-col h-full">
                     <div className="mb-4">
-                        <Link href="/community" className="inline-flex items-center text-slate-500 hover:text-[#72B7BF] transition-colors mb-4">
+                        <Link href="/community" className="inline-flex items-center text-slate-500 hover:text-[var(--color-primary)] transition-colors mb-4">
                             <ArrowLeft className="h-4 w-4 mr-2" />
                             Back to Community
                         </Link>
                         <div className="flex items-center gap-3">
-                            <div className="p-3 bg-gradient-to-br from-[#72B7BF] to-[#5da3ab] rounded-2xl">
+                            <div className="p-3 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] rounded-2xl">
                                 <Users className="h-6 w-6 text-white" />
                             </div>
                             <div>
@@ -89,7 +89,7 @@ export default function GroupChatPage() {
                                         </div>
                                         <div className={`px-4 py-2 rounded-2xl max-w-md ${
                                             message.isOwn 
-                                                ? 'bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white' 
+                                                ? 'bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white' 
                                                 : 'bg-slate-100 text-slate-800'
                                         }`}>
                                             <p>{message.text}</p>
@@ -113,13 +113,13 @@ export default function GroupChatPage() {
                                     value={newMessage}
                                     onChange={(e) => setNewMessage(e.target.value)}
                                     placeholder="Type a message..."
-                                    className="flex-1 px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#72B7BF] focus:ring-2 focus:ring-[#72B7BF]/20 transition-all"
+                                    className="flex-1 px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all"
                                 />
                                 <motion.button
                                     type="submit"
                                     whileHover={{ scale: 1.05 }}
                                     whileTap={{ scale: 0.95 }}
-                                    className="p-3 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white rounded-xl hover:shadow-lg transition-all"
+                                    className="p-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white rounded-xl hover:shadow-lg transition-all"
                                 >
                                     <Send className="h-5 w-5" />
                                 </motion.button>

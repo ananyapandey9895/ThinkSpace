@@ -53,7 +53,7 @@ const GlassCard = ({ children, className, hoverEffect = true, shimmer = false, .
             onMouseLeave={handleMouseLeave}
             whileHover={hoverEffect ? {
                 y: -8,
-                boxShadow: "0 20px 40px -10px rgba(114, 183, 191, 0.3), 0 0 20px rgba(114, 183, 191, 0.2)",
+                boxShadow: "0 20px 40px -10px rgba(25, 149, 173, 0.3), 0 0 20px rgba(25, 149, 173, 0.2)",
                 scale: 1.02,
                 transition: {
                     type: "spring",

@@ -7,7 +7,7 @@ import Navbar from "./Navbar";
 
 const MainLayout = ({ children }) => {
     return (
-        <div className="min-h-screen bg-[#FFFFC5] relative">
+        <div className="min-h-screen bg-[var(--color-bg)] relative">
             <Sidebar />
             <Navbar />
 

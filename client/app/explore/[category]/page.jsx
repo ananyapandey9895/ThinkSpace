@@ -21,31 +21,31 @@ export default function CategoryPage() {
             title: "Digital Art",
             description: "Immerse yourself in the world of pixels, vectors, and digital masterpieces.",
             icon: <Palette className="h-8 w-8" />,
-            gradient: "from-pink-500 to-rose-500"
+            gradient: "from-[var(--color-primary)] to-[var(--color-accent)]"
         },
         "technology": {
             title: "Technology",
             description: "Discover the latest innovations, gadgets, and tech trends shaping our future.",
             icon: <Monitor className="h-8 w-8" />,
-            gradient: "from-blue-500 to-cyan-500"
+            gradient: "from-[var(--color-primary)] to-[var(--color-accent)]"
         },
         "design": {
             title: "Design",
             description: "Explore the principles of aesthetics, functionality, and creative problem-solving.",
             icon: <Compass className="h-8 w-8" />,
-            gradient: "from-purple-500 to-indigo-500"
+            gradient: "from-[var(--color-primary)] to-[var(--color-primary)]"
         },
         "music": {
             title: "Music",
             description: "Feel the rhythm and discover new sounds from artists around the globe.",
             icon: <Music className="h-8 w-8" />,
-            gradient: "from-amber-500 to-orange-500"
+            gradient: "from-[var(--color-accent)] to-[var(--color-primary)]"
         },
         "photography": {
             title: "Photography",
             description: "See the world through a different lens with stunning captures and visual stories.",
             icon: <Camera className="h-8 w-8" />,
-            gradient: "from-emerald-500 to-teal-500"
+            gradient: "from-[var(--color-accent)] to-[var(--color-primary)]"
         }
     };
 
@@ -93,7 +93,7 @@ export default function CategoryPage() {
     return (
         <MainLayout>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-indigo-600 transition-colors mb-6">
+                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-[var(--color-primary)] transition-colors mb-6">
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Explore
                 </Link>
@@ -172,7 +172,7 @@ export default function CategoryPage() {
                                                     <Heart className="h-4 w-4" />
                                                     <span>{post.likes || 0}</span>
                                                 </div>
-                                                <span className="text-indigo-600 font-medium group-hover:underline">Read more</span>
+                                                <span className="text-[var(--color-primary)] font-medium group-hover:underline">Read more</span>
                                             </div>
                                         </GlassCard>
                                     </Link>

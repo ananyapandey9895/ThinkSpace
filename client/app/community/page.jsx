@@ -54,7 +54,7 @@ export default function CommunityPage() {
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
-                            <div className="p-3 bg-gradient-to-br from-[#72B7BF] to-[#5da3ab] rounded-2xl">
+                            <div className="p-3 bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] rounded-2xl">
                                 <Users className="h-8 w-8 text-white" />
                             </div>
                             <div>
@@ -66,7 +66,7 @@ export default function CommunityPage() {
                             whileHover={{ scale: 1.05 }}
                             whileTap={{ scale: 0.95 }}
                             onClick={() => setShowCreateModal(true)}
-                            className="px-6 py-3 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
+                            className="px-6 py-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white rounded-xl font-medium shadow-lg hover:shadow-xl transition-all flex items-center gap-2"
                         >
                             <Plus className="h-5 w-5" />
                             Create Group
@@ -79,7 +79,7 @@ export default function CommunityPage() {
                         onClick={() => setActiveTab("groups")}
                         className={`px-6 py-3 rounded-xl font-medium transition-all ${
                             activeTab === "groups"
-                                ? "bg-[#72B7BF] text-white shadow-lg"
+                                ? "bg-[var(--color-primary)] text-white shadow-lg"
                                 : "bg-white text-slate-600 hover:bg-slate-50"
                         }`}
                     >
@@ -89,7 +89,7 @@ export default function CommunityPage() {
                         onClick={() => setActiveTab("topics")}
                         className={`px-6 py-3 rounded-xl font-medium transition-all ${
                             activeTab === "topics"
-                                ? "bg-[#72B7BF] text-white shadow-lg"
+                                ? "bg-[var(--color-primary)] text-white shadow-lg"
                                 : "bg-white text-slate-600 hover:bg-slate-50"
                         }`}
                     >
@@ -123,7 +123,7 @@ export default function CommunityPage() {
                                         </div>
                                     </div>
                                     <Link href={`/community/group/${group.id}`}>
-                                        <button className="w-full py-2 bg-[#72B7BF] text-white rounded-xl hover:bg-[#5da3ab] transition-colors font-medium">
+                                        <button className="w-full py-2 bg-[var(--color-primary)] text-white rounded-xl hover:bg-[var(--color-primary)] transition-colors font-medium">
                                             Join Group
                                         </button>
                                     </Link>
@@ -143,7 +143,7 @@ export default function CommunityPage() {
                                 <GlassCard className="hover:shadow-lg transition-all cursor-pointer group">
                                     <div className="flex items-start justify-between">
                                         <div className="flex-1">
-                                            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[#72B7BF] transition-colors">
+                                            <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[var(--color-primary)] transition-colors">
                                                 {topic.title}
                                             </h3>
                                             <p className="text-sm text-slate-500 mb-3">by {topic.author}</p>
@@ -184,13 +184,13 @@ export default function CommunityPage() {
                                 placeholder="Group Name"
                                 value={groupName}
                                 onChange={(e) => setGroupName(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#72B7BF] focus:ring-2 focus:ring-[#72B7BF]/20 transition-all mb-4"
+                                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all mb-4"
                             />
                             <textarea
                                 placeholder="Group Description"
                                 value={groupDescription}
                                 onChange={(e) => setGroupDescription(e.target.value)}
-                                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[#72B7BF] focus:ring-2 focus:ring-[#72B7BF]/20 transition-all mb-4 h-32 resize-none"
+                                className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 focus:border-[var(--color-primary)] focus:ring-2 focus:ring-[var(--color-primary)]/20 transition-all mb-4 h-32 resize-none"
                             />
                             <div className="flex gap-3">
                                 <button
@@ -201,7 +201,7 @@ export default function CommunityPage() {
                                 </button>
                                 <button
                                     onClick={handleCreateGroup}
-                                    className="flex-1 py-3 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white rounded-xl hover:shadow-lg transition-all font-medium"
+                                    className="flex-1 py-3 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white rounded-xl hover:shadow-lg transition-all font-medium"
                                 >
                                     Create
                                 </button>

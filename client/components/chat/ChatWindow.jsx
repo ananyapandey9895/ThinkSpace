@@ -98,7 +98,7 @@ const ChatWindow = ({ conversation, onBack }) => {
             >
                 {loading ? (
                     <div className="flex items-center justify-center h-full">
-                        <Loader2 className="animate-spin text-indigo-500" size={32} />
+                        <Loader2 className="animate-spin text-[var(--color-primary)]" size={32} />
                     </div>
                 ) : messages.length === 0 ? (
                     <div className="flex items-center justify-center h-full">

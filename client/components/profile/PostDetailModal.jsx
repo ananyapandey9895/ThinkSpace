@@ -136,11 +136,11 @@ const PostDetailModal = ({ post, isOpen, onClose, onCommentAdd, onInteraction })
                                         value={comment}
                                         onChange={(e) => setComment(e.target.value)}
                                         onKeyDown={(e) => e.key === "Enter" && handleSendComment()}
-                                        className="w-full bg-slate-50 border-none rounded-full py-3 pl-4 pr-12 text-sm focus:ring-1 focus:ring-indigo-200"
+                                        className="w-full bg-slate-50 border-none rounded-full py-3 pl-4 pr-12 text-sm focus:ring-1 focus:ring-[var(--color-accent)]"
                                     />
                                     <button
                                         onClick={handleSendComment}
-                                        className="absolute right-2 p-1.5 text-indigo-600 hover:bg-indigo-50 rounded-full transition-colors"
+                                        className="absolute right-2 p-1.5 text-[var(--color-primary)] hover:bg-[var(--color-accent)]/20 rounded-full transition-colors"
                                     >
                                         <Send size={18} />
                                     </button>

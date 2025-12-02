@@ -22,14 +22,14 @@ export default function MusicPage() {
     return (
         <MainLayout>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-[#72B7BF] transition-colors mb-6">
+                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-[var(--color-primary)] transition-colors mb-6">
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Explore
                 </Link>
 
                 <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} className="mb-8">
                     <div className="flex items-center gap-4 mb-4">
-                        <div className="p-4 rounded-2xl bg-gradient-to-br from-[#72B7BF] to-[#5da3ab] text-white shadow-lg">
+                        <div className="p-4 rounded-2xl bg-gradient-to-br from-[var(--color-primary)] to-[var(--color-primary)] text-white shadow-lg">
                             <Music2 className="h-8 w-8" />
                         </div>
                         <div>
