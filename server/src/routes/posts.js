@@ -2,6 +2,7 @@ import express from 'express';
 import crypto from 'crypto';
 import Post from '../models/Post.js';
 import { protect } from '../middleware/authMiddleware.js';
+import { createNotification } from '../controllers/notificationController.js';
 
 const router = express.Router();
 
@@ -92,6 +93,7 @@ router.post('/:id/like', protect, async (req, res) => {
             post.likes.splice(userIndex, 1);
         } else {
             post.likes.push(req.userId);
+            await createNotification(post.user.toString(), 'like', req.userId, post._id);
         }
 
         await post.save();
@@ -114,6 +116,54 @@ router.post('/:id/spark', protect, async (req, res) => {
 
         await post.save();
         res.json({ stats: { likes: post.likes.length } });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Track view
+router.post('/:id/view', async (req, res) => {
+    try {
+        await Post.findByIdAndUpdate(req.params.id, { $inc: { views: 1 } });
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Track share
+router.post('/:id/share', async (req, res) => {
+    try {
+        const post = await Post.findByIdAndUpdate(
+            req.params.id,
+            { $inc: { shares: 1 } },
+            { new: true }
+        );
+        res.json({ shares: post.shares });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Search posts by tag
+router.get('/search/tags', async (req, res) => {
+    try {
+        const { tag } = req.query;
+        const posts = await Post.find({ tags: tag }).populate('user').sort({ createdAt: -1 });
+        res.json({ posts });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Get trending posts
+router.get('/trending/posts', async (req, res) => {
+    try {
+        const posts = await Post.find()
+            .populate('user')
+            .sort({ views: -1, likes: -1 })
+            .limit(20);
+        res.json({ posts });
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
