@@ -114,7 +114,7 @@ export default function Explore() {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-12 text-center"
                 >
-                    <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-violet-600 to-indigo-600 mb-4">
+                    <h1 className="text-4xl md:text-5xl font-bold text-[var(--color-primary)] mb-4">
                         Explore the Universe
                     </h1>
                     <p className="text-lg text-slate-600 max-w-2xl mx-auto">
@@ -123,7 +123,7 @@ export default function Explore() {
 
                     {/* Google-like Search Bar */}
                     <div className="mt-8 max-w-2xl mx-auto relative z-50">
-                        <div className={`relative flex items-center w-full bg-white rounded-full shadow-lg border transition-all duration-300 ${showSuggestions && searchQuery ? 'rounded-b-none rounded-t-3xl border-slate-200 shadow-xl' : 'border-transparent hover:shadow-xl'}`}>
+                        <div className={`relative flex items-center w-full bg-white rounded-full shadow-lg border transition-all duration-300 ${showSuggestions && searchQuery ? 'rounded-b-none rounded-t-3xl border-[var(--color-accent)] shadow-xl' : 'border-transparent hover:shadow-xl'}`}>
                             <div className="pl-6 text-slate-400">
                                 <Search className="h-5 w-5" />
                             </div>
@@ -154,7 +154,7 @@ export default function Explore() {
 
                         {/* Search Suggestions Dropdown */}
                         {showSuggestions && searchQuery && (
-                            <div className="absolute top-full left-0 right-0 bg-white rounded-b-3xl shadow-xl border-t-0 border border-slate-200 overflow-hidden">
+                            <div className="absolute top-full left-0 right-0 bg-white rounded-b-3xl shadow-xl border-t-0 border border-[var(--color-accent)] overflow-hidden">
                                 {suggestions.length > 0 ? (
                                     suggestions.map((suggestion, index) => (
                                         <Link
@@ -166,7 +166,7 @@ export default function Explore() {
                                                 <img src={suggestion.image} alt="" className="h-full w-full object-cover" />
                                             </div>
                                             <div className="flex flex-col">
-                                                <span className="font-medium text-slate-700 group-hover:text-indigo-600 transition-colors">
+                                                <span className="font-medium text-slate-700 group-hover:text-[var(--color-primary)] transition-colors">
                                                     {suggestion.name}
                                                 </span>
                                                 <span className="text-xs text-slate-400 capitalize">
@@ -187,7 +187,7 @@ export default function Explore() {
 
                 {loading ? (
                     <div className="flex justify-center items-center h-64">
-                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)]"></div>
                     </div>
                 ) : (
                     <motion.div
@@ -199,7 +199,7 @@ export default function Explore() {
                         {/* Categories Grid */}
                         <section>
                             <div className="flex items-center gap-2 mb-6">
-                                <Compass className="h-6 w-6 text-indigo-600" />
+                                <Compass className="h-6 w-6 text-[var(--color-primary)]" />
                                 <h2 className="text-2xl font-bold text-slate-800">Browse Categories</h2>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -207,7 +207,7 @@ export default function Explore() {
                                     <motion.div key={category.id} variants={item}>
                                         <Link href={`/explore/${category.id}`}>
                                             <GlassCard className="h-40 flex items-center justify-center relative overflow-hidden group cursor-pointer hover:shadow-xl transition-all duration-300 border-white/40">
-                                                <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 group-hover:from-indigo-500/20 group-hover:to-purple-500/20 transition-colors" />
+                                                <div className="absolute inset-0 bg-[var(--color-accent)]/10 group-hover:bg-[var(--color-accent)]/20 transition-colors" />
                                                 <h3 className="text-xl font-bold text-slate-700 group-hover:scale-110 transition-transform duration-300">
                                                     {category.name}
                                                 </h3>
@@ -221,7 +221,7 @@ export default function Explore() {
                         {/* Trending Posts */}
                         <section>
                             <div className="flex items-center gap-2 mb-6">
-                                <TrendingUp className="h-6 w-6 text-rose-500" />
+                                <TrendingUp className="h-6 w-6 text-[var(--color-primary)]" />
                                 <h2 className="text-2xl font-bold text-slate-800">Trending Now</h2>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -234,7 +234,7 @@ export default function Explore() {
                                                         {post.user?.avatar && <img src={post.user.avatar} alt={post.user.name} className="h-full w-full object-cover" />}
                                                     </div>
                                                     <div>
-                                                        <p className="font-semibold text-slate-800 group-hover:text-indigo-600 transition-colors">{post.user?.name || "Anonymous"}</p>
+                                                        <p className="font-semibold text-slate-800 group-hover:text-[var(--color-primary)] transition-colors">{post.user?.name || "Anonymous"}</p>
                                                         <p className="text-xs text-slate-500">{new Date(post.createdAt || Date.now()).toLocaleDateString()}</p>
                                                     </div>
                                                 </div>
@@ -246,7 +246,7 @@ export default function Explore() {
                                                 )}
                                                 <div className="flex items-center justify-between text-sm text-slate-500">
                                                     <span>{post.likes} Likes</span>
-                                                    <span className="text-indigo-500 font-medium">Read more →</span>
+                                                    <span className="text-[var(--color-primary)] font-medium">Read more →</span>
                                                 </div>
                                             </GlassCard>
                                         </Link>
@@ -258,7 +258,7 @@ export default function Explore() {
                         {/* Recent Sparks */}
                         <section>
                             <div className="flex items-center gap-2 mb-6">
-                                <Sparkles className="h-6 w-6 text-amber-500" />
+                                <Sparkles className="h-6 w-6 text-[var(--color-accent)]" />
                                 <h2 className="text-2xl font-bold text-slate-800">Fresh Sparks</h2>
                             </div>
                             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

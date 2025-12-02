@@ -39,7 +39,7 @@ export default function PostDetailPage() {
         return (
             <MainLayout>
                 <div className="max-w-4xl mx-auto px-4 py-8 flex justify-center items-center min-h-[50vh]">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[var(--color-primary)]"></div>
                 </div>
             </MainLayout>
         );
@@ -50,7 +50,7 @@ export default function PostDetailPage() {
             <MainLayout>
                 <div className="max-w-4xl mx-auto px-4 py-8 text-center">
                     <h1 className="text-2xl font-bold text-slate-800 mb-4">Post not found</h1>
-                    <Link href="/explore" className="text-indigo-600 hover:underline">
+                    <Link href="/explore" className="text-[var(--color-primary)] hover:underline">
                         Return to Explore
                     </Link>
                 </div>
@@ -61,7 +61,7 @@ export default function PostDetailPage() {
     return (
         <MainLayout>
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-indigo-600 transition-colors mb-8">
+                <Link href="/explore" className="inline-flex items-center text-slate-500 hover:text-[var(--color-primary)] transition-colors mb-8">
                     <ArrowLeft className="h-4 w-4 mr-2" />
                     Back to Explore
                 </Link>
@@ -95,7 +95,7 @@ export default function PostDetailPage() {
                                     {post.category && (
                                         <>
                                             <span>•</span>
-                                            <span className="px-2 py-0.5 bg-indigo-50 text-indigo-600 rounded-full text-xs font-medium capitalize">
+                                            <span className="px-2 py-0.5 bg-[var(--color-accent)]/20 text-[var(--color-primary)] rounded-full text-xs font-medium capitalize">
                                                 {post.category}
                                             </span>
                                         </>
@@ -111,11 +111,11 @@ export default function PostDetailPage() {
                         </div>
 
                         <div className="flex items-center gap-6 pt-6 border-t border-slate-100">
-                            <button className="flex items-center gap-2 text-slate-500 hover:text-rose-500 transition-colors">
+                            <button className="flex items-center gap-2 text-slate-500 hover:text-[var(--color-primary)] transition-colors">
                                 <Heart className="h-6 w-6" />
                                 <span className="font-medium">{post.likes || 0} Likes</span>
                             </button>
-                            <button className="flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors">
+                            <button className="flex items-center gap-2 text-slate-500 hover:text-[var(--color-primary)] transition-colors">
                                 <MessageCircle className="h-6 w-6" />
                                 <span className="font-medium">{post.comments?.length || 0} Comments</span>
                             </button>

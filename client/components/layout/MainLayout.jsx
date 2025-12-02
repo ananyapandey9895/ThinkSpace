@@ -10,11 +10,8 @@ const MainLayout = ({ children }) => {
     const mainPadding = isSidebarCollapsed ? "md:pl-24" : "md:pl-[300px]";
 
     return (
-        <div className="min-h-screen bg-[#F1F1F2] relative">
-            <Sidebar
-                collapsed={isSidebarCollapsed}
-                onToggle={() => setIsSidebarCollapsed((prev) => !prev)}
-            />
+        <div className="min-h-screen bg-[var(--color-bg)] relative">
+            <Sidebar />
             <Navbar />
 
             <main

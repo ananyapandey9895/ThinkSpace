@@ -96,15 +96,15 @@ export default function MarketPlace() {
                     animate={{ opacity: 1, y: 0 }}
                     className="mb-12 relative"
                 >
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#72B7BF]/10 via-transparent to-[#72B7BF]/10 blur-3xl -z-10" />
+                    <div className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)]/10 via-transparent to-[var(--color-primary)]/10 blur-3xl -z-10" />
                     <div className="flex items-center justify-center gap-3 mb-4">
                         <motion.div
                             animate={{ rotate: [0, 10, -10, 0] }}
                             transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}
                         >
-                            <ShoppingBag className="h-10 w-10 text-[#72B7BF]" />
+                            <ShoppingBag className="h-10 w-10 text-[var(--color-primary)]" />
                         </motion.div>
-                        <h1 className="text-5xl font-bold bg-gradient-to-r from-[#72B7BF] via-[#5da3ab] to-[#72B7BF] bg-clip-text text-transparent">
+                        <h1 className="text-5xl font-bold bg-gradient-to-r from-[var(--color-primary)] via-[var(--color-primary)] to-[var(--color-primary)] bg-clip-text text-transparent">
                             MarketPlace
                         </h1>
                     </div>
@@ -121,11 +121,11 @@ export default function MarketPlace() {
                 >
                     <div className="flex flex-col md:flex-row gap-4 mb-6">
                         <div className="flex-1 relative group">
-                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-[#72B7BF] transition-colors" />
+                            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400 group-focus-within:text-[var(--color-primary)] transition-colors" />
                             <input
                                 type="text"
                                 placeholder="Search products..."
-                                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-slate-200 focus:border-[#72B7BF] focus:ring-4 focus:ring-[#72B7BF]/20 transition-all shadow-sm hover:shadow-md"
+                                className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border-2 border-slate-200 focus:border-[var(--color-primary)] focus:ring-4 focus:ring-[var(--color-primary)]/20 transition-all shadow-sm hover:shadow-md"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -143,14 +143,14 @@ export default function MarketPlace() {
                                 whileTap={{ scale: 0.95 }}
                                 className={`px-6 py-3 rounded-2xl font-medium transition-all whitespace-nowrap relative overflow-hidden ${
                                     selectedCategory === cat
-                                        ? "bg-[#72B7BF] text-white shadow-lg shadow-[#72B7BF]/30"
-                                        : "bg-white text-slate-600 hover:bg-slate-50 border-2 border-slate-200 hover:border-[#72B7BF]/30"
+                                        ? "bg-[var(--color-primary)] text-white shadow-lg shadow-[var(--color-primary)]/30"
+                                        : "bg-white text-slate-600 hover:bg-slate-50 border-2 border-slate-200 hover:border-[var(--color-primary)]/30"
                                 }`}
                             >
                                 {selectedCategory === cat && (
                                     <motion.div
                                         layoutId="activeCategory"
-                                        className="absolute inset-0 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab]"
+                                        className="absolute inset-0 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)]"
                                         transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                     />
                                 )}
@@ -173,8 +173,8 @@ export default function MarketPlace() {
                             whileHover={{ y: -8 }}
                             transition={{ type: "spring", stiffness: 300 }}
                         >
-                            <GlassCard className="h-full hover:shadow-2xl transition-all duration-300 cursor-pointer group relative overflow-hidden border-2 border-white/40 hover:border-[#72B7BF]/30">
-                                <div className="absolute inset-0 bg-gradient-to-br from-[#72B7BF]/0 to-[#72B7BF]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <GlassCard className="h-full hover:shadow-2xl transition-all duration-300 cursor-pointer group relative overflow-hidden border-2 border-white/40 hover:border-[var(--color-primary)]/30">
+                                <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-primary)]/0 to-[var(--color-primary)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                                 
                                 <div className="relative h-52 rounded-xl overflow-hidden mb-4">
                                     <motion.img
@@ -194,14 +194,14 @@ export default function MarketPlace() {
                                         <Heart className="h-5 w-5 text-slate-600 hover:text-red-500 transition-colors" />
                                     </motion.button>
                                     
-                                    <div className="absolute top-3 left-3 px-3 py-1.5 bg-[#72B7BF] text-white text-xs font-bold rounded-full shadow-lg">
+                                    <div className="absolute top-3 left-3 px-3 py-1.5 bg-[var(--color-primary)] text-white text-xs font-bold rounded-full shadow-lg">
                                         <Tag className="h-3 w-3 inline mr-1" />
                                         {product.category}
                                     </div>
                                 </div>
                                 
                                 <div className="relative z-10">
-                                    <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[#72B7BF] transition-colors line-clamp-1">
+                                    <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[var(--color-primary)] transition-colors line-clamp-1">
                                         {product.title}
                                     </h3>
                                     <p className="text-sm text-slate-500 mb-3 flex items-center gap-1">
@@ -223,14 +223,14 @@ export default function MarketPlace() {
                                     <div className="flex items-center justify-between pt-4 border-t border-slate-100">
                                         <div>
                                             <p className="text-xs text-slate-500 mb-1">Price</p>
-                                            <span className="text-2xl font-bold bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] bg-clip-text text-transparent">
+                                            <span className="text-2xl font-bold bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] bg-clip-text text-transparent">
                                                 ${product.price}
                                             </span>
                                         </div>
                                         <motion.button 
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            className="px-6 py-2.5 bg-gradient-to-r from-[#72B7BF] to-[#5da3ab] text-white rounded-xl hover:shadow-lg hover:shadow-[#72B7BF]/30 transition-all font-medium"
+                                            className="px-6 py-2.5 bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-primary)] text-white rounded-xl hover:shadow-lg hover:shadow-[var(--color-primary)]/30 transition-all font-medium"
                                         >
                                             Buy Now
                                         </motion.button>

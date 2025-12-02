@@ -53,7 +53,7 @@ const ToggleButton = ({
             {label && (
                 <span className={cn(
                     "font-medium transition-colors",
-                    enabled ? "text-[#72B7BF]" : "text-slate-500",
+                    enabled ? "text-[var(--color-primary)]" : "text-slate-500",
                     disabled && "opacity-50"
                 )}>
                     {label}
@@ -65,9 +65,9 @@ const ToggleButton = ({
                 onClick={() => !disabled && onChange?.(!enabled)}
                 disabled={disabled}
                 className={cn(
-                    "relative rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#72B7BF]/50 focus:ring-offset-2",
+                    "relative rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)]/50 focus:ring-offset-2",
                     currentSize.track,
-                    enabled ? "bg-[#72B7BF]" : "bg-slate-300",
+                    enabled ? "bg-[var(--color-primary)]" : "bg-slate-300",
                     disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer hover:shadow-lg",
                     enabled && !disabled && "shadow-[0_0_15px_rgba(114,183,191,0.4)]"
                 )}
@@ -106,7 +106,7 @@ const ToggleButton = ({
                     <motion.div
                         className="rounded-full"
                         animate={{
-                            backgroundColor: enabled ? "#72B7BF" : "#94a3b8",
+                            backgroundColor: enabled ? "var(--color-primary)" : "#cbd5e1",
                             scale: enabled ? [1, 1.2, 1] : 1,
                         }}
                         transition={{

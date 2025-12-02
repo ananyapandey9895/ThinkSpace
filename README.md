@@ -52,14 +52,23 @@ Our mission is to **foster thoughtful discussions** using modern tech, AI-assist
 
 ---
 
+## 🎨 Design System
+
+**Color Palette:**
+- Primary: `#1995AD` - Main brand color for buttons, links, and active states
+- Accent: `#A1D6E2` - Secondary highlights and hover effects
+- Background: `#F1F1F2` - Neutral surface color
+
+All colors are defined as CSS variables (`--color-primary`, `--color-accent`, `--color-bg`) for easy theming.
+
 ## 🏗️ Tech Stack
 
 | Layer | Technology |
 |-------|-------------|
-| Frontend | React.js + Vite + TailwindCSS |
+| Frontend | React.js + Next.js + TailwindCSS |
 | Backend | Node.js + Express.js |
 | Database | MongoDB (Mongoose ORM) |
-| Authentication | JWT, bcrypt |
+| Authentication | JWT, bcrypt, Clerk |
 | Realtime | Socket.io |
 | Deployment | Vercel (client) + Render/Atlas (server + DB) |
 | Version Control | Git + GitHub |

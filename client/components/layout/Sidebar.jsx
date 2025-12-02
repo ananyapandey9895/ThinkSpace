@@ -46,112 +46,91 @@ const Sidebar = ({ collapsed = false, onToggle }) => {
                     collapsed ? "w-0" : "w-72"
                 )}
             >
-                {/* Sidebar content (cloned from Reddit style, no box, just text on background) */}
-                <motion.div
-                    className={cn(
-                        "flex flex-col gap-2 pr-8 pl-6 py-1 transition-all duration-300 w-72",
-                        collapsed
-                            ? "-translate-x-full opacity-0 pointer-events-none"
-                            : "translate-x-0 opacity-100"
-                    )}
-                    variants={containerVariants}
-                    initial="hidden"
-                    animate="visible"
-                >
-                    <div className="mb-4">
-                        <h1 className="text-2xl font-bold text-[#1995AD]">
-                            ThinkSpace
-                        </h1>
-                    </div>
+                <div className="px-4 py-4 mb-2">
+                    <h1 className="text-2xl font-bold text-[var(--color-primary)]">
+                        ThinkSpace
+                    </h1>
+                </div>
 
-                    <nav className="flex flex-col gap-1">
-                        {navItems.map((item) => {
-                            const isActive = pathname === item.id;
-                            return (
-                                <Link key={item.id} href={item.id}>
-                                    <motion.div
-                                        variants={itemVariants}
-                                        className={cn(
-                                            "flex items-center gap-3 px-4 py-2 rounded-full transition-colors duration-200",
-                                            isActive
-                                                ? "bg-[#A1D6E2] text-[#1995AD]"
-                                                : "text-slate-700 hover:bg-[#F1F1F2] hover:text-[#1995AD]"
-                                        )}
-                                        whileHover={{ x: 4 }}
-                                    >
-                                        <item.icon size={20} />
-                                        <span className="font-medium">{item.label}</span>
-                                    </motion.div>
-                                </Link>
-                            );
-                        })}
-                    </nav>
+                <nav className="flex flex-col gap-1">
+                    {navItems.map((item) => {
+                        const isActive = pathname === item.id;
+                        return (
+                            <Link key={item.id} href={item.id}>
+                                <motion.div
+                                    variants={itemVariants}
+                                    className={cn(
+                                        "flex items-center gap-3 px-4 py-3 rounded-2xl transition-all duration-300 group relative overflow-hidden",
+                                        isActive ? "text-[var(--color-primary)]" : "text-slate-500 hover:text-slate-800"
+                                    )}
+                                    whileHover={{ scale: 1.02, x: 4 }}
+                                    whileTap={{ scale: 0.98 }}
+                                >
+                                    {isActive && (
+                                        <motion.div
+                                            layoutId="activePill"
+                                            className="absolute inset-0 bg-[var(--color-primary)]/20 rounded-2xl -z-10"
+                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                        />
+                                    )}
+                                    <item.icon size={22} className={cn("relative z-10 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3", isActive && "fill-current")} />
+                                    <span className="font-medium relative z-10">{item.label}</span>
+                                </motion.div>
+                            </Link>
+                        );
+                    })}
+                </nav>
 
-                    <div className="mt-4 pt-4 border-t border-[#A1D6E2] flex flex-col gap-1">
-                        {isSignedIn ? (
-                            <>
-                                <Link href="/settings">
-                                    <motion.div
-                                        variants={itemVariants}
-                                        className="flex items-center gap-3 px-4 py-2 rounded-full text-slate-700 hover:bg-[#F1F1F2] hover:text-slate-900 transition-colors"
-                                        whileHover={{ x: 4 }}
-                                    >
-                                        <Settings size={20} />
-                                        <span className="font-medium">Settings</span>
-                                    </motion.div>
-                                </Link>
+                <div className="mt-4 pt-4 border-t border-[var(--color-primary)]/20 flex flex-col gap-1">
+                    {isSignedIn ? (
+                        <>
+                            <Link href="/settings">
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-slate-800 hover:bg-white/40 transition-all"
+                                    whileHover={{ scale: 1.02, x: 4 }}
+                                >
+                                    <Settings size={22} />
+                                    <span className="font-medium">Settings</span>
+                                </motion.div>
+                            </Link>
 
-                                <SignOutButton>
-                                    <motion.button
-                                        variants={itemVariants}
-                                        className="flex items-center gap-3 px-4 py-2 rounded-full text-slate-600 hover:text-red-600 hover:bg-red-50 transition-colors text-left"
-                                        whileHover={{ x: 4 }}
-                                    >
-                                        <LogOut size={20} />
-                                        <span className="font-medium">Sign Out</span>
-                                    </motion.button>
-                                </SignOutButton>
-                            </>
-                        ) : (
-                            <>
-                                <Link href="/sign-in">
-                                    <motion.div
-                                        variants={itemVariants}
-                                        className="flex items-center gap-3 px-4 py-2 rounded-full text-slate-700 hover:bg-[#F1F1F2] hover:text-[#1995AD] transition-colors"
-                                        whileHover={{ x: 4 }}
-                                    >
-                                        <LogIn size={20} />
-                                        <span className="font-medium">Sign In</span>
-                                    </motion.div>
-                                </Link>
+                            <SignOutButton>
+                                <motion.button
+                                    variants={itemVariants}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-red-600 hover:bg-red-50 transition-all w-full text-left"
+                                    whileHover={{ scale: 1.02, x: 4 }}
+                                >
+                                    <LogOut size={22} />
+                                    <span className="font-medium">Sign Out</span>
+                                </motion.button>
+                            </SignOutButton>
+                        </>
+                    ) : (
+                        <>
+                            <Link href="/sign-in">
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl text-slate-500 hover:text-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 transition-all"
+                                    whileHover={{ scale: 1.02, x: 4 }}
+                                >
+                                    <LogIn size={22} />
+                                    <span className="font-medium">Sign In</span>
+                                </motion.div>
+                            </Link>
 
-                                <Link href="/sign-up">
-                                    <motion.div
-                                        variants={itemVariants}
-                                        className="flex items-center gap-3 px-4 py-2 rounded-full bg-[#1995AD] text-white hover:bg-[#157a8e] transition-colors shadow-md"
-                                        whileHover={{ x: 4 }}
-                                    >
-                                        <UserPlus size={20} />
-                                        <span className="font-medium">Sign Up</span>
-                                    </motion.div>
-                                </Link>
-                            </>
-                        )}
-                    </div>
-                </motion.div>
-
-                {/* Vertical divider line like Reddit */}
-                <div className={cn("h-full w-px bg-[#A1D6E2] transition-opacity duration-300", collapsed ? "opacity-0" : "opacity-100")} />
-
-                {/* Collapse / expand button */}
-                <button
-                    type="button"
-                    onClick={onToggle}
-                    className={cn(
-                        "absolute top-24 h-10 w-10 rounded-full flex items-center justify-center transition-all duration-300 z-50",
-                        collapsed
-                            ? "left-6 bg-transparent hover:bg-slate-200"
-                            : "left-full -translate-x-1/2 bg-white border border-[#1995AD] shadow-sm hover:bg-[#A1D6E2]/60"
+                            <Link href="/sign-up">
+                                <motion.div
+                                    variants={itemVariants}
+                                    className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-[var(--color-primary)] text-white hover:bg-[var(--color-primary)]/80 transition-all shadow-lg"
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
+                                >
+                                    <UserPlus size={22} />
+                                    <span className="font-medium">Sign Up</span>
+                                </motion.div>
+                            </Link>
+                        </>
                     )}
                     title={collapsed ? "Expand navigation" : "Collapse navigation"}
                 >

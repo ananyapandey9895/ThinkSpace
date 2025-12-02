@@ -27,7 +27,7 @@ const MessageBubble = ({ message, isOwn, senderName }) => {
                     className={cn(
                         "px-4 py-2.5 rounded-3xl break-words",
                         isOwn
-                            ? "bg-[#72B7BF] text-white rounded-br-md"
+                            ? "bg-[var(--color-primary)] text-white rounded-br-md"
                             : "bg-slate-100 text-slate-800 rounded-bl-md"
                     )}
                 >
