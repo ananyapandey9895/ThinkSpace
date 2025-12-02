@@ -4,11 +4,11 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
-import { Home, Zap, Compass, Users, User, Settings, LogOut, LogIn, UserPlus, MessageCircle } from "lucide-react";
+import { Home, Zap, Compass, Users, User, Settings, LogOut, LogIn, UserPlus, MessageCircle, Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { SignOutButton, useUser } from "@clerk/nextjs";
 
-const Sidebar = () => {
+const Sidebar = ({ collapsed = false, onToggle }) => {
     const pathname = usePathname();
     const { isSignedIn, user } = useUser();
 
@@ -39,12 +39,12 @@ const Sidebar = () => {
     };
 
     return (
-        <aside className="fixed left-6 top-1/2 -translate-y-1/2 hidden md:flex flex-col z-50">
-            <motion.div
-                className="glass-panel rounded-3xl p-4 flex flex-col gap-2 min-w-[240px] border border-white/20 shadow-2xl backdrop-blur-2xl bg-white/5"
-                variants={containerVariants}
-                initial="hidden"
-                animate="visible"
+        <aside className="fixed inset-y-0 left-0 hidden md:flex z-40">
+            <div
+                className={cn(
+                    "relative flex h-full items-start pt-24 transition-all duration-300",
+                    collapsed ? "w-0" : "w-72"
+                )}
             >
                 <div className="px-4 py-4 mb-2">
                     <h1 className="text-2xl font-bold text-[var(--color-primary)]">
@@ -132,8 +132,11 @@ const Sidebar = () => {
                             </Link>
                         </>
                     )}
-                </div>
-            </motion.div>
+                    title={collapsed ? "Expand navigation" : "Collapse navigation"}
+                >
+                    <Menu size={20} className="text-[#1995AD]" />
+                </button>
+            </div>
         </aside>
     );
 };

@@ -58,7 +58,7 @@ const HomeHeader = () => {
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
                     >
-                        Welcome..!!
+                        Every Thought Deserves a Stage.
                     </motion.h1>
                 </div>
             </div>
