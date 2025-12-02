@@ -1,14 +1,8 @@
 "use client";
 
-import React, { useEffect } from "react";
-import { Zap, Moon, Brain, Share2, MessageSquare } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import { Zap, Moon, Brain, Share2 } from "lucide-react";
 import { motion } from "framer-motion";
-import GlassCard from "@/components/ui/GlassCard";
-import InteractionBar from "@/components/ui/InteractionBar";
-import PostDetailModal from "@/components/profile/PostDetailModal";
-import { usePostList } from "@/hooks/usePostList";
-import CreatePost from "./CreatePost";
-import RightSidebar from "@/components/layout/RightSidebar";
 
 const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
     const [sparks, setSparks] = React.useState(post.sparks || 0);
@@ -40,21 +34,18 @@ const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
 
     return (
         <div className="flex flex-col bg-white border border-[#456882]/30 rounded-md mb-3 hover:border-[#456882]/50 transition-colors cursor-pointer overflow-hidden">
-            {/* Content Column */}
             <div className="flex-1 p-2 md:p-3">
-                {/* Header */}
                 <div className="flex items-center gap-2 text-xs text-slate-500 mb-2">
                     <div className="flex items-center gap-1">
                         <img src={post.user.image} alt={post.user.name} className="w-5 h-5 rounded-full" />
-                        <span className="font-bold text-slate-900 hover:underline">r/{post.user.name.replace(/\s+/g, '')}</span>
+                        <span className="font-bold text-slate-900 hover:underline">r/webnerrr</span>
                     </div>
                     <span>•</span>
-                    <span>Posted by u/{post.user.username || post.user.name}</span>
+                    <span>Posted by u/webnerrr</span>
                     <span>•</span>
-                    <span>{new Date(post.createdAt).toLocaleDateString()}</span>
+                    <span>{new Date(post.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' })}</span>
                 </div>
 
-                {/* Title/Content */}
                 <div onClick={onThoughtsClick}>
                     <h3 className="text-lg font-medium text-slate-900 mb-2 leading-snug">{post.content || post.caption}</h3>
                     {post.image && (
@@ -64,7 +55,6 @@ const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
                     )}
                 </div>
 
-                {/* Footer Actions */}
                 <div className="flex items-center gap-4 text-[#1B3C53] text-sm font-bold mt-4 pt-3 border-t border-[#456882]/30">
                     <button onClick={handleSpark} className="flex items-center gap-2 px-3 py-2 hover:bg-[#456882]/10 rounded-md transition-colors">
                         <Zap size={18} className="text-yellow-500" />
@@ -92,53 +82,37 @@ const RedditPostCard = ({ post, onInteraction, onThoughtsClick }) => {
 };
 
 export default function Feed({ initialPosts }) {
-    const { posts, setPosts, selectedPost, setSelectedPost, updatePostStats, incrementThoughts } = usePostList(initialPosts);
+    const [posts, setPosts] = useState(initialPosts || []);
 
     useEffect(() => {
         setPosts(initialPosts);
     }, [initialPosts]);
 
-    const handlePostCreated = (newPost) => {
-        setPosts(prev => [newPost, ...prev]);
-    };
-
-    const handleCommentAdd = () => {
-        if (!selectedPost) return;
-        incrementThoughts(selectedPost._id);
+    const updatePostStats = (postId, type, value) => {
+        setPosts(prevPosts => prevPosts.map(p => {
+            if (p._id === postId) {
+                return { ...p, [type]: value };
+            }
+            return p;
+        }));
     };
 
     return (
-        <div className="flex gap-6">
-            {/* Main Feed Column */}
-            <div className="flex-1 min-w-0">
-                <CreatePost onPostCreated={handlePostCreated} />
-
-                <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5 }}
-                >
-                    {posts?.map((post) => (
-                        <RedditPostCard
-                            key={post._id}
-                            post={post}
-                            onInteraction={updatePostStats}
-                            onThoughtsClick={() => setSelectedPost(post)}
-                        />
-                    ))}
-                </motion.div>
-            </div>
-
-            {/* Right Sidebar Column */}
-            <RightSidebar />
-
-            <PostDetailModal
-                post={selectedPost}
-                isOpen={!!selectedPost}
-                onClose={() => setSelectedPost(null)}
-                onCommentAdd={handleCommentAdd}
-                onInteraction={(type, value) => selectedPost && updatePostStats(selectedPost._id, type, value)}
-            />
+        <div className="flex-1 min-w-0">
+            <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                {posts?.map((post) => (
+                    <RedditPostCard
+                        key={post._id}
+                        post={post}
+                        onInteraction={updatePostStats}
+                        onThoughtsClick={() => console.log('Thought clicked')}
+                    />
+                ))}
+            </motion.div>
         </div>
     );
 }

@@ -71,7 +71,6 @@ const Sidebar = ({ isOpen, onClose }) => {
                 <div className="py-4">
                     <SidebarSection title="Feeds">
                         <SidebarItem icon={Home} label="Home" href="/" isActive={pathname === "/"} />
-                        <SidebarItem icon={TrendingUp} label="Popular" href="/popular" isActive={pathname === "/popular"} />
                         <SidebarItem icon={Zap} label="Sparks" href="/sparks" isActive={pathname === "/sparks"} />
                     </SidebarSection>
 
@@ -82,7 +81,6 @@ const Sidebar = ({ isOpen, onClose }) => {
                     </SidebarSection>
 
                     <SidebarSection title="Resources">
-                        <SidebarItem icon={Star} label="Premium" href="/premium" isActive={pathname === "/premium"} />
                         <SidebarItem icon={User} label="Profile" href="/profile" isActive={pathname === "/profile"} />
                         <SidebarItem icon={Settings} label="Settings" href="/settings" isActive={pathname === "/settings"} />
                     </SidebarSection>
