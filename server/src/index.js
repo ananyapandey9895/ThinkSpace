@@ -8,6 +8,8 @@ import noteRoutes from "./routes/noteRoutes.js";
 import linkRoutes from "./routes/linkRoutes.js";
 import postRoutes from "./routes/posts.js";
 import exploreRoutes from "./routes/exploreRoutes.js";
+import messageRoutes from "./routes/messageRoutes.js";
+import conversationRoutes from "./routes/conversationRoutes.js";
 
 dotenv.config();
 const app = express();
@@ -24,6 +26,8 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/links", linkRoutes);
 app.use("/api/posts", postRoutes);
 app.use("/api/explore", exploreRoutes);
+app.use("/api/messages", messageRoutes);
+app.use("/api/conversations", conversationRoutes);
 
 
 const connectDB = async () => {
@@ -51,6 +55,6 @@ const connectDB = async () => {
 
 connectDB();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
