@@ -157,7 +157,7 @@ const ProfileContent = ({ user }) => {
                             </div>
                             <p className="text-slate-500 font-medium mb-4">@{user.username || user.firstName?.toLowerCase()}</p>
                             <p className="text-slate-700 max-w-lg leading-relaxed text-base">
-                                Digital explorer & creator. Loving the anti-gravity vibes! ☁️✨<br />Building the future of thought sharing.
+                                Digital explorer & creator. Love to contribute to new projects! ☁️✨<br />Building the future of thought sharing.
                             </p>
 
                             <div className="flex gap-4 mt-4 text-sm text-slate-500 font-medium">

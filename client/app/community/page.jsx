@@ -25,10 +25,10 @@ export default function CommunityPage() {
     ]);
 
     const topics = [
-        { id: 1, title: "Best practices for React development", author: "John Doe", replies: 45, likes: 123 },
-        { id: 2, title: "How to improve UI/UX design skills", author: "Jane Smith", replies: 32, likes: 89 },
-        { id: 3, title: "Photography tips for beginners", author: "Mike Ross", replies: 67, likes: 234 },
-        { id: 4, title: "Music production software recommendations", author: "Sarah Kim", replies: 28, likes: 76 },
+        { id: 1, title: "Best practices for React development", author: "Sachin", replies: 45, likes: 123 },
+        { id: 2, title: "How to improve UI/UX design skills", author: "Preeti", replies: 32, likes: 89 },
+        { id: 3, title: "Photography tips for beginners", author: "Harsh", replies: 67, likes: 234 },
+        { id: 4, title: "Music production software recommendations", author: "John", replies: 28, likes: 76 },
     ];
 
     const handleCreateGroup = () => {
@@ -44,7 +44,6 @@ export default function CommunityPage() {
             setShowCreateModal(false);
             setGroupName("");
             setGroupDescription("");
-            router.push(`/community/group/${newGroup.id}`);
         }
     };
 
@@ -110,9 +109,9 @@ export default function CommunityPage() {
                                     <div className="relative h-32 rounded-xl overflow-hidden mb-4">
                                         <img src={group.image} alt={group.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                        <h3 className="absolute bottom-3 left-3 text-white font-bold text-xl">{group.name}</h3>
+                                        <h3 className="absolute bottom-3 left-3 font-bold text-xl drop-shadow-lg" style={{color: 'white'}}>{group.name}</h3>
                                     </div>
-                                    <div className="flex items-center justify-between text-sm text-slate-600 mb-3">
+                                    <div className="flex items-center justify-between text-sm text-slate-800 mb-3">
                                         <div className="flex items-center gap-1">
                                             <UserIcon className="h-4 w-4" />
                                             <span>{group.members} members</span>
@@ -146,8 +145,8 @@ export default function CommunityPage() {
                                             <h3 className="text-xl font-bold text-slate-800 mb-2 group-hover:text-[var(--color-primary)] transition-colors">
                                                 {topic.title}
                                             </h3>
-                                            <p className="text-sm text-slate-500 mb-3">by {topic.author}</p>
-                                            <div className="flex items-center gap-4 text-sm text-slate-600">
+                                            <p className="text-sm text-slate-700 mb-3">by {topic.author}</p>
+                                            <div className="flex items-center gap-4 text-sm text-slate-800">
                                                 <div className="flex items-center gap-1">
                                                     <MessageCircle className="h-4 w-4" />
                                                     <span>{topic.replies} replies</span>
