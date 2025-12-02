@@ -5,19 +5,20 @@ import {
     createConversation,
     deleteConversation
 } from '../controllers/conversationController.js';
+import { protect } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Get all conversations for a user
-router.get('/', getConversations);
+router.get('/', protect, getConversations);
 
 // Get a specific conversation
-router.get('/:id', getConversation);
+router.get('/:id', protect, getConversation);
 
 // Create a new conversation
-router.post('/', createConversation);
+router.post('/', protect, createConversation);
 
 // Delete a conversation
-router.delete('/:id', deleteConversation);
+router.delete('/:id', protect, deleteConversation);
 
 export default router;

@@ -1,5 +1,6 @@
 import express from "express";
 import { createReflection, getReflections } from "../controllers/reflectionController.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -7,7 +8,7 @@ const router = express.Router();
 router.get("/:userId", getReflections);
 
 // POST /api/reflection
-router.post("/", createReflection);
+router.post("/", protect, createReflection);
 
 export default router;
 
